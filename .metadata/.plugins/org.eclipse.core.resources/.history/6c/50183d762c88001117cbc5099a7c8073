@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1">    
+            
+       <!-- Bootstrap -->
+       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+       
+       <!-- Google Fonts -->
+       <link rel="preconnect" href="https://fonts.googleapis.com">
+       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+       <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">   
+       
+       <link th:href="@{/css/style.css}" rel="stylesheet" >
+       
+       <title>店舗一覧</title>       
+   </head>
+   <body>
+       <div class="samuraitravel-wrapper">
+           <!-- ヘッダー -->
+           <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm samuraitravel-navbar">
+               <div class="container samuraitravel-container">
+                   <a class="navbar-brand" th:href="@{/}">                        
+                       <img class="samuraitravel-logo me-1" th:src="@{/images/logo.png}" alt="SAMURAI NAGOYAMESHI">                        
+                   </a>
+                     <svg xmlns="http://w3.org" viewBox="0 0 800 500" width="100%" height="100%">
+  <!-- 背景透過 -->
+  <rect width="100%" height="100%" fill="none"/>
+
+  <g transform="translate(0, -10)">
+    <!-- 左の金の鯱（鱗を完全省略したミニマルなシルエット） -->
+    <path d="M 230 260 C 180 260, 160 230, 160 180 C 160 140, 190 110, 230 110 C 220 140, 225 170, 245 190 C 265 210, 290 200, 310 220 C 290 240, 260 260, 230 260 Z" fill="#FF7A00"/>
+    <rect x="150" y="260" width="100" height="12" rx="4" fill="#1A1A1A"/>
+
+    <!-- 右の金の鯱（鱗を完全省略したミニマルなシルエット） -->
+    <path d="M 570 260 C 620 260, 640 230, 640 180 C 640 140, 610 110, 570 110 C 580 140, 575 170, 555 190 C 535 210, 510 200, 490 220 C 510 240, 540 260, 570 260 Z" fill="#FF7A00"/>
+    <rect x="550" y="260" width="100" height="12" rx="4" fill="#1A1A1A"/>
+
+    <!-- 中央：オレンジの正円（一切の線を無くしたソリッドな塗り） -->
+    <circle cx="400" cy="185" r="75" fill="#FF7A00"/>
+
+    <!-- 中央のシンボル：お椀と箸（フラットな黒のアイコン） -->
+    <!-- お箸 -->
+    <line x1="340" y1="140" x2="460" y2="125" stroke="#1A1A1A" stroke-width="8" stroke-linecap="round"/>
+    <line x1="342" y1="152" x2="462" y2="137" stroke="#1A1A1A" stroke-width="8" stroke-linecap="round"/>
+    <!-- お椀 -->
+    <path d="M 350 175 C 350 215, 450 215, 450 175 Z" fill="#1A1A1A"/>
+    <rect x="380" y="210" width="40" height="10" rx="2" fill="#1A1A1A"/>
+  </g>
+
+  <!-- メインテキスト（フチ無しのすっきりした極太ゴシック） -->
+  <text x="400" y="370" font-family="'Helvetica Neue', Helvetica, Arial, 'Hiragino Kaku Gothic ProN', sans-serif" font-size="68" font-weight="900" fill="#1A1A1A" text-anchor="middle" letter-spacing="4">NAGOYAMESHI</text>
+
+  <!-- サブテキスト（オレンジのソリッドな配置） -->
+  <text x="400" y="425" font-family="'Helvetica Neue', Helvetica, Arial, 'Hiragino Kaku Gothic ProN', sans-serif" font-size="26" font-weight="700" fill="#FF7A00" text-anchor="middle" letter-spacing="8">名古屋B級グルメ</text>
+</svg>                                                           
+               </div>
+           </nav>
+           
+           <main>
+               <div class="container pt-4 pb-5 samuraitravel-container">
+                   <div class="row justify-content-center">
+                       <div class="col-xxl-9 col-xl-10 col-lg-11">
+                           
+                           <h1 class="mb-4 text-center">店舗一覧</h1>   
+                           
+                           <div class="d-flex justify-content-end">                                
+                               <a href="#" class="btn text-white shadow-sm mb-3 samuraitravel-btn">登録</a>
+                           </div>                                                          
+                           
+                           <table class="table">
+                               <thead>
+                                   <tr>
+                                       <th scope="col">ID</th>
+                                       <th scope="col">民宿名</th>
+                                       <th scope="col">郵便番号</th>
+                                       <th scope="col">住所</th>
+                                       <th scope="col">電話番号</th>
+                                       <th scope="col"></th>                                        
+                                   </tr>
+                               </thead>   
+                               <tbody>                                                     
+                                   <tr th:each="restaurant : ${restaurants}">
+                                       <td th:text="${restaurant.getId()}"></td>
+                                       <td th:text="${restaurant.getName()}"></td>
+                                       <td th:text="${restaurant.getPostalCode()}"></td>
+                                       <td th:text="${restaurant.getAddress()}"></td>
+                                       <td th:text="${restaurant.getPhoneNumber()}"></td>
+                                       <td><a href="#">詳細</a></td>                                                                                
+                                   </tr>                                      
+                               </tbody>
+                           </table>                                       
+                       </div>
+                   </div>
+               </div>              
+           </main>
+           
+           <!-- フッター -->
+           <footer>
+               <div class="d-flex justify-content-center align-items-center h-100">
+                   <p class="text-center text-muted small mb-0">&copy; SAMURAI Travel All rights reserved.</p>      
+               </div>                 
+           </footer>
+       </div>    
+       
+       <!-- Bootstrap -->
+       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>        
+   </body>
+</html>

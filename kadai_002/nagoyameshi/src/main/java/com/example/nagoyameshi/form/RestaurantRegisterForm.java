@@ -1,5 +1,7 @@
 package com.example.nagoyameshi.form;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.Min;
@@ -16,6 +18,8 @@ public class RestaurantRegisterForm {
     
     @NotBlank(message = "説明を入力してください。")
     private String description;   
+    
+    private List<Integer> categoryIds; 
     
     @NotNull(message = "料金を入力してください。")
     @Min(value = 1, message = "料金は1円以上に設定してください。")

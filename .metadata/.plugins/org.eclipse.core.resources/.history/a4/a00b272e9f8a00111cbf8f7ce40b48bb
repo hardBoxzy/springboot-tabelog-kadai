@@ -1,0 +1,27 @@
+package com.example.nagoyameshi.entity;
+
+
+import org.springframework.data.annotation.Id;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+@Entity
+@Table(name = "restaurant_categories")
+@IdClass(RestaurantCategoryId.class) // 複合主キーを指定
+@Data
+public class RestaurantCategory {
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
+    
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+    private Category category;     
+}

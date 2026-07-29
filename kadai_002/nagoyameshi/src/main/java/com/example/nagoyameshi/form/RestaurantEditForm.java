@@ -16,14 +16,15 @@ public class RestaurantEditForm {
     
     @NotBlank(message = "店舗名を入力してください。")
     private String name;
-        
+    
+    
     private MultipartFile imageFile;
     
     @NotBlank(message = "説明を入力してください。")
     private String description;   
     
     @NotNull(message = "料金を入力してください。")
-    @Min(value = 1, message = "宿泊料金は1円以上に設定してください。")
+    @Min(value = 1, message = "料金は1円以上に設定してください。")
     private Integer price; 
     
     @NotNull(message = "定員を入力してください。")

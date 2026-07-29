@@ -11,17 +11,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.nagoyameshi.entity.Category;
 import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.entity.RestaurantCategory;
 import com.example.nagoyameshi.form.RestaurantEditForm;
 import com.example.nagoyameshi.form.RestaurantRegisterForm;
+import com.example.nagoyameshi.repository.CategoryRepository;
+import com.example.nagoyameshi.repository.RestaurantCategoryRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 
 @Service
 public class RestaurantService {
    private final RestaurantRepository restaurantRepository;    
-   
-   public RestaurantService(RestaurantRepository restaurantRepository) {
-       this.restaurantRepository = restaurantRepository;        
+   private final CategoryRepository categoryRepository;
+   private final RestaurantCategoryRepository restaurantCategoryRepository;
+   public RestaurantService(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository, RestaurantCategoryRepository restaurantCategoryRepository) {
+       this.restaurantRepository = restaurantRepository; 
+       this.categoryRepository =  categoryRepository;
+       this.restaurantCategoryRepository =  restaurantCategoryRepository;
    }    
    
    @Transactional
@@ -47,6 +54,19 @@ public class RestaurantService {
        restaurant.setPhoneNumber(restaurantRegisterForm.getPhoneNumber());
                    
        restaurantRepository.save(restaurant);
+       
+       // 2. 画面でチェックされたカテゴリーIDがあれば、中間テーブルに保存
+       if (restaurantRegisterForm.getCategoryIds() != null) {
+           for (Integer categoryId : restaurantRegisterForm.getCategoryIds()) {
+               Category category = categoryRepository.findById(categoryId).orElseThrow();
+               
+               RestaurantCategory restaurantCategory = new RestaurantCategory();
+               restaurantCategory.setRestaurant(restaurant); // 保存直後の店舗オブジェクトをセット
+               restaurantCategory.setCategory(category);
+               
+               restaurantCategoryRepository.save(restaurantCategory);
+           }
+       }
    }  
    
    @Transactional

@@ -1,6 +1,8 @@
 
 package com.example.nagoyameshi.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -18,9 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
+import com.example.nagoyameshi.entity.Category;
 import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.entity.RestaurantCategory;
 import com.example.nagoyameshi.form.RestaurantEditForm;
 import com.example.nagoyameshi.form.RestaurantRegisterForm;
+import com.example.nagoyameshi.repository.CategoryRepository;
+import com.example.nagoyameshi.repository.RestaurantCategoryRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.service.RestaurantService;
 
@@ -29,10 +35,13 @@ import com.example.nagoyameshi.service.RestaurantService;
 public class AdminRestaurantController {
     private final RestaurantRepository restaurantRepository; 
     private final RestaurantService restaurantService;   
-    
-    public AdminRestaurantController(RestaurantRepository restaurantRepository, RestaurantService restaurantService) {
+    private final RestaurantCategoryRepository restaurantCategoryRepository;
+    private final CategoryRepository categoryRepository;
+    public AdminRestaurantController(RestaurantRepository restaurantRepository, RestaurantService restaurantService, RestaurantCategoryRepository restaurantCategoryRepository, CategoryRepository categoryRepository) {
         this.restaurantRepository = restaurantRepository; 
         this.restaurantService =  restaurantService;
+        this.restaurantCategoryRepository  = restaurantCategoryRepository;
+        this.categoryRepository  = categoryRepository;
     }	
     
     @GetMapping
@@ -54,15 +63,19 @@ public class AdminRestaurantController {
     @GetMapping("/{id}")
     public String show(@PathVariable(name = "id") Integer id, Model model) {
     	Restaurant restaurant = restaurantRepository.getReferenceById(id);
-        
+    	// 2. 店舗に紐づくカテゴリーのリストを取得
+        List<RestaurantCategory> restaurantCategories = restaurantCategoryRepository.findByRestaurant(restaurant); 
         model.addAttribute("restaurant", restaurant);
-        
+        model.addAttribute("restaurantCategories", restaurantCategories);
         return "admin/restaurants/show";
     }  
     
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("restaurantRegisterForm", new RestaurantRegisterForm());
+        // 2. チェックボックスに表示する「すべてのカテゴリー」を渡す
+        List<Category> categories = categoryRepository.findAll();
+        model.addAttribute("categories", categories);
         return "admin/restaurants/register";
     } 
     

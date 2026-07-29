@@ -2,8 +2,10 @@ package com.example.nagoyameshi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
+@EnableAsync // ★これを追加して、非同期処理を有効にします
 public class NagoyameshiApplication {
 
 	public static void main(String[] args) {

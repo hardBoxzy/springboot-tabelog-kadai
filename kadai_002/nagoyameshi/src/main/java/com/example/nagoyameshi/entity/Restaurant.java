@@ -25,8 +25,6 @@ public class Restaurant {
     @Column(name = "image_name")
     private String imageName;
     
-    @Column(name = "tag")
-    private String tag;
     
     @Column(name = "description")
     private String description;

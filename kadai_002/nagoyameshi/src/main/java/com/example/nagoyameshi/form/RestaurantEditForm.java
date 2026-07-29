@@ -1,9 +1,12 @@
 package com.example.nagoyameshi.form;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +20,8 @@ public class RestaurantEditForm {
     @NotBlank(message = "店舗名を入力してください。")
     private String name;
     
+    @NotEmpty(message = "カテゴリーを一つ以上選択していください")
+    private List<Integer> categoryIds; 
     
     private MultipartFile imageFile;
     

@@ -91,6 +91,23 @@ public class RestaurantService {
        restaurant.setPhoneNumber(restaurantEditForm.getPhoneNumber());
                    
        restaurantRepository.save(restaurant);
+       
+       // 👇【重要】1. まず、この店舗に紐づいている既存の中間テーブルデータをすべて削除する
+       restaurantCategoryRepository.deleteByRestaurant(restaurant);
+    // 👇【重要】これを追加：削除のSQLを今すぐデータベースに強制実行（反映）させる
+       restaurantCategoryRepository.flush();
+    // 2. 画面でチェックされたカテゴリーIDがあれば、中間テーブルに保存
+       if (restaurantEditForm.getCategoryIds() != null) {
+           for (Integer categoryId : restaurantEditForm.getCategoryIds()) {
+               Category category = categoryRepository.findById(categoryId).orElseThrow();
+               
+               RestaurantCategory restaurantCategory = new RestaurantCategory();
+               restaurantCategory.setRestaurant(restaurant); // 保存直後の店舗オブジェクトをセット
+               restaurantCategory.setCategory(category);
+               
+               restaurantCategoryRepository.save(restaurantCategory);
+           }
+       }
    }  
    // UUIDを使って生成したファイル名を返す
    public String generateNewFileName(String fileName) {

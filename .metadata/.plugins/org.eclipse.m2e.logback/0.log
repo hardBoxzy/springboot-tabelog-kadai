@@ -44599,3 +44599,4 @@ Caused by: com.google.inject.OutOfScopeException: Cannot access Key[type=org.apa
 	at com.google.inject.internal.ConstructorBindingImpl$Factory.get(ConstructorBindingImpl.java:300)
 	at com.google.inject.internal.InjectorImpl$1.get(InjectorImpl.java:1101)
 	... 53 common frames omitted
+2026-07-29 20:40:47,812 [Worker-1: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.

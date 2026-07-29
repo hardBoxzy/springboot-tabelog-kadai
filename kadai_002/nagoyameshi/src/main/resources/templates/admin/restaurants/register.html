@@ -55,7 +55,8 @@
                                        <label for="description" class="col-form-label text-md-left fw-bold">カテゴリー</label>
                                    </div>
                                    <div class="col-md-8"> 
-									   <div class="row g-0">                           
+									   <div class="row g-0"> 
+										   <div th:if="${#fields.hasErrors('categoryIds')}" class="text-danger small mb-2" th:errors="*{categoryIds}"></div>                             
 	                                       <div th:each="category : ${categories}" class="form-check col-4 mb-2">
 								            <input type="checkbox" 
 								                   th:field="*{categoryIds}" 

@@ -80,8 +80,10 @@ public class AdminRestaurantController {
     } 
     
     @PostMapping("/create")
-    public String create(@ModelAttribute @Validated RestaurantRegisterForm restaurantRegisterForm, BindingResult bindingResult, RedirectAttributesModelMap redirectAttributes) {        
+    public String create(@ModelAttribute @Validated RestaurantRegisterForm restaurantRegisterForm, BindingResult bindingResult, RedirectAttributesModelMap redirectAttributes,Model model) {        
         if (bindingResult.hasErrors()) {
+        	List<Category> categories = categoryRepository.findAll();
+            model.addAttribute("categories", categories);
             return "admin/restaurants/register";
         }
         
@@ -94,8 +96,19 @@ public class AdminRestaurantController {
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable(name = "id") Integer id, Model model) {
     	Restaurant restaurant = restaurantRepository.getReferenceById(id);
-        String imageName = restaurant.getImageName();
-        RestaurantEditForm restaurantEditForm = new RestaurantEditForm(restaurant.getId(), restaurant.getName(), null, restaurant.getDescription(), restaurant.getPrice(), restaurant.getCapacity(), restaurant.getPostalCode(), restaurant.getAddress(), restaurant.getPhoneNumber());
+    	String imageName = restaurant.getImageName() ;
+    			
+    	List<RestaurantCategory> restaurantCategories = restaurantCategoryRepository.findByRestaurant(restaurant);
+     // 1. 中間テーブルのリストから、カテゴリーID（Integer）のリストを抽出する
+        List<Integer> categoryIds = restaurantCategories.stream()//forの代わりに使用、restaurantCategories＝{  "restaurant": 10, "category": { "id": 3, "name": "ラーメン" } }, {  "restaurant": 10, "category": { "id": 5, "name": "中華" } }
+                .map(restaurantCategory -> restaurantCategory.getCategory().getId())//mapは流れてきたデータを、別の形に変換（マッピング）します。getCategory()＝{ "id": 3, "name": "ラーメン" }、getId()＝"id": 3
+                
+                .toList();// 新しい List にまとめる
+        RestaurantEditForm restaurantEditForm = new RestaurantEditForm(restaurant.getId(), restaurant.getName(), categoryIds,null,restaurant.getDescription(), restaurant.getPrice(), restaurant.getCapacity(), restaurant.getPostalCode(), restaurant.getAddress(), restaurant.getPhoneNumber());
+        
+        // 3. 画面表示に必要な「すべてのカテゴリー一覧」もModelに渡す
+        List<Category> categories = categoryRepository.findAll();
+        model.addAttribute("categories", categories);
         
         model.addAttribute("imageName", imageName);
         model.addAttribute("restaurantEditForm", restaurantEditForm);
@@ -104,8 +117,10 @@ public class AdminRestaurantController {
     }  
     
     @PostMapping("/{id}/update")
-    public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {        
+    public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {        
         if (bindingResult.hasErrors()) {
+        	List<Category> categories = categoryRepository.findAll();
+            model.addAttribute("categories", categories);
             return "admin/restaurants/edit";
         }
         

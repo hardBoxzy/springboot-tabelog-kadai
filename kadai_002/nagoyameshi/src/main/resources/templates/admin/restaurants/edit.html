@@ -56,6 +56,27 @@
                                
                                <div class="form-group row mb-3">
                                    <div class="col-md-4">
+                                       <label for="description" class="col-form-label text-md-left fw-bold">カテゴリー</label>
+                                   </div>
+                                   <div class="col-md-8"> 
+									   <div class="row g-0">
+										   <div th:if="${#fields.hasErrors('categoryIds')}" class="text-danger small mb-2" th:errors="*{categoryIds}"></div>                           
+	                                       <div th:each="category : ${categories}" class="form-check col-4 mb-2">
+								            <input type="checkbox" 
+								                   th:field="*{categoryIds}" 
+								                   th:value="${category.id}" 
+								                   class="form-check-input" 
+								                   th:id="'category_' + ${category.id}">
+								            <label class="form-check-label" 
+								                   th:for="'category_' + ${category.id}" 
+								                   th:text="${category.name}"style="margin-left: -5px;">ラーメン</label>
+								            </div>
+							            </div>
+                                   </div>
+                               </div>
+                               
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
                                        <label for="description" class="col-form-label text-md-left fw-bold">説明</label>
                                    </div>
                                    <div class="col-md-8">                            

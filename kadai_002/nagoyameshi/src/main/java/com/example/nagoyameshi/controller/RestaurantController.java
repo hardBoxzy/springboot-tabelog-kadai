@@ -10,11 +10,13 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.nagoyameshi.entity.Category;
 import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.form.ReservationInputForm;
 import com.example.nagoyameshi.repository.CategoryRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 
@@ -31,30 +33,59 @@ public class RestaurantController {
     @GetMapping
     public String index(@RequestParam(name = "keyword", required = false) String keyword,
                         @RequestParam(name = "categoryId", required = false) Integer categoryId,
-                        @RequestParam(name = "price", required = false) Integer price,                        
+                        @RequestParam(name = "price", required = false) Integer price,    
+                        @RequestParam(name = "order", required = false) String order,
                         @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable,
                         Model model) 
     {
         Page<Restaurant> restaurantPage;
                 
         if (keyword != null && !keyword.isEmpty()) {
-            restaurantPage = restaurantRepository.findByNameLikeOrAddressLike("%" + keyword + "%", "%" + keyword + "%", pageable);
+            if (order != null && order.equals("priceAsc")) {
+            	restaurantPage = restaurantRepository.findByNameLikeOrAddressLikeOrderByPriceAsc("%" + keyword + "%", "%" + keyword + "%", pageable);
+            } else {
+            	restaurantPage = restaurantRepository.findByNameLikeOrAddressLikeOrderByCreatedAtDesc("%" + keyword + "%", "%" + keyword + "%", pageable);
+            }   
         } else if (categoryId != null ) {
             restaurantPage = restaurantRepository.findByRestaurantCategories_Category_Id(categoryId, pageable);
+            if (order != null && order.equals("priceAsc")) {
+            	restaurantPage = restaurantRepository.findByRestaurantCategories_Category_IdOrderByPriceAsc(categoryId, pageable);
+            } else {
+            	restaurantPage = restaurantRepository.findByRestaurantCategories_Category_IdOrderByCreatedAtDesc(categoryId, pageable);
+            }    
         } else if (price != null) {
-            restaurantPage = restaurantRepository.findByPriceLessThanEqual(price, pageable);
+        	if (order != null && order.equals("priceAsc")) {
+                restaurantPage = restaurantRepository.findByPriceLessThanEqualOrderByPriceAsc(price, pageable);
+            } else {
+                restaurantPage = restaurantRepository.findByPriceLessThanEqualOrderByCreatedAtDesc(price, pageable);
+            } 
         } else {
-            restaurantPage = restaurantRepository.findAll(pageable);
+        	 if (order != null && order.equals("priceAsc")) {
+                 restaurantPage = restaurantRepository.findAllByOrderByPriceAsc(pageable);
+             } else {
+                 restaurantPage = restaurantRepository.findAllByOrderByCreatedAtDesc(pageable);   
+             }     
         }                
         
         model.addAttribute("restaurantPage", restaurantPage);
         model.addAttribute("keyword", keyword);
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("price", price);
+        model.addAttribute("order", order);
         
         List<Category> categories = categoryRepository.findAll();
         model.addAttribute("categories", categories);
         
         return "restaurants/index";
     }
+    		
+    @GetMapping("/{id}")
+    public String show(@PathVariable(name = "id") Integer id, Model model) {
+    	Restaurant restaurant = restaurantRepository.getReferenceById(id);
+        
+        model.addAttribute("restaurant", restaurant);         
+        model.addAttribute("reservationInputForm", new ReservationInputForm());
+        
+        return "restaurants/show";
+    }   
 }

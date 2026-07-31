@@ -120,3 +120,16 @@ INSERT IGNORE INTO restaurant_categories (restaurant_id, category_id) VALUES
 (20, 3), 
 -- 21: 天ぷら 万葉 (和食・その他)
 (21, 11);
+
+-- reservationsテーブル
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (1, 1, 1, '2023-04-01 00:00:00', 2);
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (2, 2, 1, '2023-04-01 00:00:00', 3);
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (3, 3, 1, '2023-04-01 00:00:00', 4);
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (4, 4, 1, '2023-04-01 00:00:00', 5);
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (5, 5, 1, '2023-04-01 00:00:00', 6);
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (6, 6, 1, '2023-04-01 00:00:00', 2);
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (7, 7, 1, '2023-04-01 00:00:00', 3);
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (8, 8, 1, '2023-04-01 00:00:00', 4);
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (9, 9, 1, '2023-04-01 00:00:00', 5);
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (10, 10, 1, '2023-04-01 00:00:00', 6);
+INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (11, 11, 1, '2023-04-01 00:00:00', 2);

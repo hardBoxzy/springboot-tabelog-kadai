@@ -95,6 +95,14 @@ public class UserService {
         userRepository.save(user);
     }  
     
+ // ユーザーを有効にする
+    @Transactional
+    public void changeRoleByUserId(Integer userId,Integer roleId) {
+    	User user = userRepository.getReferenceById(userId);
+    	user.setRole(roleRepository.getReferenceById(roleId));
+        userRepository.save(user);
+    } 
+    
     // メールアドレスが変更されたかどうかをチェックする
     public boolean isEmailChanged(UserEditForm userEditForm) {
         User currentUser = userRepository.getReferenceById(userEditForm.getId());

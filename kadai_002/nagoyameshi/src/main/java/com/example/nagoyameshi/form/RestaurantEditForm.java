@@ -44,4 +44,7 @@ public class RestaurantEditForm {
     
     @NotBlank(message = "電話番号を入力してください。")
     private String phoneNumber;
+    
+    
+    private List<Integer> holidays;
 }

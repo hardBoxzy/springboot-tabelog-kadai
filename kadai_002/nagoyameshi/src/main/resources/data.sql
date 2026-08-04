@@ -1,26 +1,26 @@
 -- restaurantsテーブル
-INSERT IGNORE INTO restaurants (id, name, image_name, description, price, capacity, postal_code, address, phone_number, regular_holiday) VALUES 
-(1, 'SAMURAIの食堂','restaurant01.png', '最寄り駅から徒歩10分。掘りごたつ席でゆったり過ごせるおでん居酒屋。', 3000, 2, '073-0145', '愛知県名古屋市西五条南X-XX-XX', '012-345-678', 'SUNDAY'),
-(2, 'なごやの麺処', 'restaurant02.png', '栄駅から徒歩5分。名物の味噌煮込みうどんが自慢の老舗店。', 1500, 4, '460-0008', '愛知県名古屋市中区栄三丁目1-1', '052-111-2222', 'MONDAY'),
-(3, 'しゃちほこ鮨', 'restaurant03.png', '伏見駅直結。毎朝市場から仕入れる新鮮なネタが楽しめる本格カウンター寿司。', 8000, 2, '460-0003', '愛知県名古屋市中区錦二丁目2-2', '052-222-3333', 'TUESDAY'),
-(4, 'ひつまぶし金鯱', 'restaurant04.png', '名古屋駅構内。秘伝のタレと炭火で香ばしく焼き上げた絶品ひつまぶし。', 4500, 4, '450-0002', '愛知県名古屋市中村区名駅四丁目3-3', '052-333-4444', 'NONE'),
-(5, 'カフェ・ド・シロノワ', 'restaurant05.png', '大須観音近く。朝は名古屋伝統の豪華な小倉トーストモーニングを提供。', 800, 2, '460-0011', '愛知県名古屋市中区大須二丁目4-4', '052-444-5555', 'WEDNESDAY'),
-(6, '手羽先キング', 'restaurant06.png', '金山駅から徒歩3分。スパイシーなタレが病みつきになる手羽先唐揚げ専門店。', 2500, 6, '460-0022', '愛知県名古屋市中区金山一丁目5-5', '052-555-6666', 'NONE'),
-(7, 'トラットリア・マルコ', 'restaurant07.png', '千種駅すぐ。薪窯で焼き上げる本格ナポリピッツァとソムリエ厳選ワイン。', 5000, 2, '464-0850', '愛知県名古屋市千種区今池一丁目6-6', '052-666-7777', 'MONDAY'),
-(8, 'ビストロ・ナゴヤ', 'restaurant08.png', '覚王山の閑静な住宅街。地産地消にこだわったカジュアルなフレンチコース。', 7000, 2, '464-0075', '愛知県名古屋市千種区内山三丁目7-7', '052-777-8888', 'THURSDAY'),
-(9, '四川麻辣坊', 'restaurant09.png', '今池駅から徒歩2分。本場のスパイスを効かせた名物・台湾ラーメンと麻婆豆腐。', 1200, 4, '464-0851', '愛知県名古屋市千種区今池南8-8', '052-888-9999', 'NONE'),
-(10, '焼肉の横綱', 'restaurant10.png', '国際センター駅近く。最高級 of 飛騨牛をリーズナブルに味わえる個室焼肉店。', 6000, 4, '450-0001', '愛知県名古屋市中村区那古野一丁目9-9', '052-999-0000', 'WEDNESDAY'),
-(11, '洋食 みつば', 'restaurant11.png', '東別院駅から徒歩8分。じっくり煮込んだデミグラスソースのハンバーグ。', 1800, 2, '460-0016', '愛知県名古屋市中区橘一丁目10-10', '052-123-4567', 'FRIDAY'),
-(12, 'ステーキハウス城', 'restaurant12.png', '新栄町駅すぐ。目の前の鉄板でジューシーに焼き上げる贅沢ステーキ。', 12000, 2, '460-0005', '愛知県名古屋市中区東桜二丁目11-11', '052-234-5678', 'SUNDAY'),
-(13, '博多中洲屋台', 'restaurant09.png', '矢場町駅から徒歩4分。濃厚な豚骨スープと極細ストレート麺が絡む本格派。', 900, 1, '460-0008', '愛知県名古屋市中区栄五丁目12-12', '052-345-6789', 'NONE'),
-(14, 'グリーンカレーズ', 'restaurant05.png', '鶴舞公園近く。ハーブとココナッツミルクが香る本場タイのグリーンカレー。', 1400, 2, '460-0012', '愛知県名古屋市中区千代田三丁目13-13', '052-456-7890', 'TUESDAY'),
-(15, '串カツ どて屋', 'restaurant06.png', '上方とは一味違う、名古屋濃厚八丁味噌ベースのどて焼きとサクサク串カツ。', 2000, 4, '453-0015', '愛知県名古屋市中村区椿町14-14', '052-567-8901', 'NONE'),
-(16, 'バル・エスパーニャ', 'restaurant07.png', '上前津駅から徒歩5分。魚介の旨味が凝縮された特製パエリアが人気のバル。', 4000, 2, '460-0013', '愛知県名古屋市中区上前津一丁目15-15', '052-678-9012', 'WEDNESDAY'),
-(17, 'オーガニックキッチン', 'restaurant05.png', '星ヶ丘駅から徒歩6分。契約農家から届く新鮮野菜をふんだんに使ったランチ。', 2200, 2, '464-0026', '愛知県名古屋市千種区星ケ丘元町16-16', '052-789-0123', 'SATURDAY'),
-(18, 'バー・シャドウ', 'restaurant06.png', '錦の地下に佇む隠れ家。バーテンダーが好みに合わせて作る本格カクテル。', 3500, 1, '460-0003', '愛知県名古屋市中区錦三丁目17-17', '052-890-1234', 'SUNDAY'),
-(19, '韓流デリ', 'restaurant09.png', '大須商店街内。とろけるチーズがたっぷりの大人気チーズタッカルビ。', 2800, 4, '460-0011', '愛知県名古屋市中区大須三丁目18-18', '052-901-2345', 'NONE'),
-(20, 'スイーツテラス', 'restaurant05.png', '本山駅近く。季節のフルーツを贅沢に使ったパフェと自家焙煎コーヒー。', 1600, 2, '464-0032', '愛知県名古屋市千種区猫洞通19-19', '052-012-3456', 'THURSDAY'),
-(21, '天ぷら 万葉', 'restaurant01.png', '御器所駅から徒歩3分。職人が一品ずつ丁寧に揚げるサクサクの江戸前天ぷら。', 5500, 2, '466-0015', '愛知県名古屋市昭和区御器所通20-20', '052-123-0000', 'MONDAY');
+INSERT IGNORE INTO restaurants (id, name, image_name, description, price, capacity, postal_code, address, phone_number) VALUES 
+(1, 'SAMURAIの食堂','restaurant01.png', '最寄り駅から徒歩10分。掘りごたつ席でゆったり過ごせるおでん居酒屋。', 3000, 2, '073-0145', '愛知県名古屋市西五条南X-XX-XX', '012-345-678'),
+(2, 'なごやの麺処', 'restaurant02.png', '栄駅から徒歩5分。名物の味噌煮込みうどんが自慢の老舗店。', 1500, 4, '460-0008', '愛知県名古屋市中区栄三丁目1-1', '052-111-2222'),
+(3, 'しゃちほこ鮨', 'restaurant03.png', '伏見駅直結。毎朝市場から仕入れる新鮮なネタが楽しめる本格カウンター寿司。', 8000, 2, '460-0003', '愛知県名古屋市中区錦二丁目2-2', '052-222-3333'),
+(4, 'ひつまぶし金鯱', 'restaurant04.png', '名古屋駅構内。秘伝のタレと炭火で香ばしく焼き上げた絶品ひつまぶし。', 4500, 4, '450-0002', '愛知県名古屋市中村区名駅四丁目3-3', '052-333-4444'),
+(5, 'カフェ・ド・シロノワ', 'restaurant05.png', '大須観音近く。朝は名古屋伝統の豪華な小倉トーストモーニングを提供。', 800, 2, '460-0011', '愛知県名古屋市中区大須二丁目4-4', '052-444-5555'),
+(6, '手羽先キング', 'restaurant06.png', '金山駅から徒歩3分。スパイシーなタレが病みつきになる手羽先唐揚げ専門店。', 2500, 6, '460-0022', '愛知県名古屋市中区金山一丁目5-5', '052-555-6666'),
+(7, 'トラットリア・マルコ', 'restaurant07.png', '千種駅すぐ。薪窯で焼き上げる本格ナポリピッツァとソムリエ厳選ワイン。', 5000, 2, '464-0850', '愛知県名古屋市千種区今池一丁目6-6', '052-666-7777'),
+(8, 'ビストロ・ナゴヤ', 'restaurant08.png', '覚王山の閑静な住宅街。地産地消にこだわったカジュアルなフレンチコース。', 7000, 2, '464-0075', '愛知県名古屋市千種区内山三丁目7-7', '052-777-8888'),
+(9, '四川麻辣坊', 'restaurant09.png', '今池駅から徒歩2分。本場のスパイスを効かせた名物・台湾ラーメンと麻婆豆腐。', 1200, 4, '464-0851', '愛知県名古屋市千種区今池南8-8', '052-888-9999'),
+(10, '焼肉の横綱', 'restaurant10.png', '国際センター駅近く。最高級 of 飛騨牛をリーズナブルに味わえる個室焼肉店。', 6000, 4, '450-0001', '愛知県名古屋市中村区那古野一丁目9-9', '052-999-0000'),
+(11, '洋食 みつば', 'restaurant11.png', '東別院駅から徒歩8分。じっくり煮込んだデミグラスソースのハンバーグ。', 1800, 2, '460-0016', '愛知県名古屋市中区橘一丁目10-10', '052-123-4567'),
+(12, 'ステーキハウス城', 'restaurant12.png', '新栄町駅すぐ。目の前の鉄板でジューシーに焼き上げる贅沢ステーキ。', 12000, 2, '460-0005', '愛知県名古屋市中区東桜二丁目11-11', '052-234-5678'),
+(13, '博多中洲屋台', 'restaurant09.png', '矢場町駅から徒歩4分。濃厚な豚骨スープと極細ストレート麺が絡む本格派。', 900, 1, '460-0008', '愛知県名古屋市中区栄五丁目12-12', '052-345-6789'),
+(14, 'グリーンカレーズ', 'restaurant05.png', '鶴舞公園近く。ハーブとココナッツミルクが香る本場タイのグリーンカレー。', 1400, 2, '460-0012', '愛知県名古屋市中区千代田三丁目13-13', '052-456-7890'),
+(15, '串カツ どて屋', 'restaurant06.png', '上方とは一味違う、名古屋濃厚八丁味噌ベースのどて焼きとサクサク串カツ。', 2000, 4, '453-0015', '愛知県名古屋市中村区椿町14-14', '052-567-8901'),
+(16, 'バル・エスパーニャ', 'restaurant07.png', '上前津駅から徒歩5分。魚介の旨味が凝縮された特製パエリアが人気のバル。', 4000, 2, '460-0013', '愛知県名古屋市中区上前津一丁目15-15', '052-678-9012'),
+(17, 'オーガニックキッチン', 'restaurant05.png', '星ヶ丘駅から徒歩6分。契約農家から届く新鮮野菜をふんだんに使ったランチ。', 2200, 2, '464-0026', '愛知県名古屋市千種区星ケ丘元町16-16', '052-789-0123'),
+(18, 'バー・シャドウ', 'restaurant06.png', '錦の地下に佇む隠れ家。バーテンダーが好みに合わせて作る本格カクテル。', 3500, 1, '460-0003', '愛知県名古屋市中区錦三丁目17-17', '052-890-1234'),
+(19, '韓流デリ', 'restaurant09.png', '大須商店街内。とろけるチーズがたっぷりの大人気チーズタッカルビ。', 2800, 4, '460-0011', '愛知県名古屋市中区大須三丁目18-18', '052-901-2345'),
+(20, 'スイーツテラス', 'restaurant05.png', '本山駅近く。季節のフルーツを贅沢に使ったパフェと自家焙煎コーヒー。', 1600, 2, '464-0032', '愛知県名古屋市千種区猫洞通19-19', '052-012-3456'),
+(21, '天ぷら 万葉', 'restaurant01.png', '御器所駅から徒歩3分。職人が一品ずつ丁寧に揚げるサクサクの江戸前天ぷら。', 5500, 2, '466-0015', '愛知県名古屋市昭和区御器所通20-20', '052-123-0000');
 
 -- rolesテーブル
 INSERT IGNORE INTO roles (id, name) VALUES
@@ -133,3 +133,99 @@ INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, numbe
 INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (9, 9, 1, '2023-04-01 00:00:00', 5);
 INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (10, 10, 1, '2023-04-01 00:00:00', 6);
 INSERT IGNORE INTO reservations (id, restaurant_id, user_id, checkin_date, number_of_people) VALUES (11, 11, 1, '2023-04-01 00:00:00', 2);
+
+
+-- restaurant_holidays（中間テーブル）の仮データ
+INSERT IGNORE INTO holidays (id, restaurant_id, day_id) VALUES 
+-- 1: SAMURAIの食堂 (おでん居酒屋)
+(1, 1, 2), 
+(2, 1, 3), 
+-- 2: なごやの麺処 (うどん・その他)
+(3, 2, 4), 
+-- 3: しゃちほこ鮨 (寿司)
+(4, 3, 5), 
+-- 4: ひつまぶし金鯱 (うなぎ・その他)
+(5, 4, 4), 
+-- 5: カフェ・ド・シロノワ (カフェ、スイーツ)
+(6, 5, 3), 
+(7, 5, 1), 
+-- 6: 手羽先キング (居酒屋、焼き鳥)
+(8, 6, 2), 
+(9, 6, 3), 
+-- 7: トラットリア・マルコ (イタリアン)
+(10, 7, 6), 
+-- 8: ビストロ・ナゴヤ (フレンチ・その他)
+(11, 8, 4), 
+-- 9: 四川麻辣坊 (中華料理、ラーメン)
+(12, 9, 0), 
+(13, 9, 1), 
+-- 10: 焼肉の横綱 (焼肉)
+(14, 10, 4), 
+-- 11: 洋食 みつば (洋食・その他)
+(15, 11, 4), 
+-- 12: ステーキハウス城 (ステーキ・その他)
+(16, 12, 4), 
+-- 13: 博多中洲屋台 (ラーメン)
+(17, 13, 1), 
+-- 14: グリーンカレーズ (カレー)
+(18, 14, 2), 
+-- 15: 串カツ どて屋 (居酒屋)
+(19, 15, 2), 
+-- 16: バル・エスパーニャ (居酒屋・スペイン)
+(20, 16, 2), 
+-- 17: オーガニックキッチン (カフェ)
+(21, 17, 3), 
+-- 18: バー・シャドウ (居酒屋・バー)
+(22, 18, 2), 
+-- 19: 韓流デリ (中華/その他・韓国料理)
+(23, 19, 4), 
+-- 20: スイーツテラス (スイーツ、カフェ)
+(24, 20, 1), 
+(25, 20, 3), 
+-- 21: 天ぷら 万葉 (和食・その他)
+(26, 21, 4);
+
+-- favoritesテーブル
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (1, 1, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (2, 2, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (3, 3, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (4, 4, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (5, 5, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (6, 6, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (7, 1, 2, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (8, 2, 2, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (9, 6, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (10, 7, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (11, 8, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (12, 9, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (13, 10, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (14, 11, 1, '2023-04-11');
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id, created_at) VALUES (15, 12, 1, '2023-04-11');
+
+-- reviewsテーブル
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (1, 1, 1, 4, '素晴らしい食事でした。また利用したいです。', '2023-04-11', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (2, 1, 1, 5, '店内が綺麗で、快適に過ごせました。', '2023-04-01', '2023-12-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (3, 1, 1, 4, 'アクセスが良く、ランチに最適でした。', '2023-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (4, 1, 2, 2, 'スタッフが親切で、気持ちよく食事ができました。', '2024-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (5, 1, 1, 3, '駅から近く、便利でした。', '2023-04-01', '2023-01-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (6, 1, 3, 1, '周辺の観光スポットが充実していて、楽しめました。', '2024-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (7, 1, 1, 3, 'スタッフが親切で、気持ちよく食事ができました。', '2025-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (8, 1, 4, 0, '料理が手頃で、コストパフォーマンスが良かったです。', '2026-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (9, 1, 1, 4, '静かな環境でゆっくり食事ができました。', '2021-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (10, 1, 1, 2, '店内の設備（個室など）が充実していました。', '2023-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (11, 11, 1, 0, 'フリーWi-Fiが快適で助かりました。', '2023-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (12, 12, 1, 5, '清潔感があり、気持ちよく食事ができました。', '2023-04-01', '2023-04-02');
+
+
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (13, 1, 1, 4, '2素晴らしい食事でした。また利用したいです。', '2023-04-11', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (14, 3, 1, 5, '2店内が綺麗で、快適に過ごせました。', '2023-04-01', '2023-12-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (15, 3, 1, 4, '2アクセスが良く、ランチに最適でした。', '2023-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (16, 4, 2, 2, '2スタッフが親切で、気持ちよく食事ができました。', '2024-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (17, 5, 1, 3, '2駅から近く、便利でした。', '2023-04-01', '2023-01-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (18, 6, 3, 1, '2周辺の観光スポットが充実していて、楽しめました。', '2024-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (19, 7, 1, 3, '2スタッフが親切で、気持ちよく食事ができました。', '2025-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (20, 8, 4, 0, '2料理が手頃で、コストパフォーマンスが良かったです。', '2026-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (21, 9, 1, 4, '2静かな環境でゆっくり食事ができました。', '2021-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (22, 10, 1, 2, '2店内の設備（個室など）が充実していました。', '2023-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (23, 11, 1, 0, '2フリーWi-Fiが快適で助かりました。', '2023-04-01', '2023-04-02');
+INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (24, 12, 1, 5, '2清潔感があり、気持ちよく食事ができました。', '2023-04-01', '2023-04-02');

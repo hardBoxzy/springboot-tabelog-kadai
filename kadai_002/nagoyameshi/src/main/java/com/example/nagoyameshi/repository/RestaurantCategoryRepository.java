@@ -16,6 +16,7 @@ public interface RestaurantCategoryRepository extends JpaRepository<RestaurantCa
     List<RestaurantCategory> findByRestaurant(Restaurant restaurant);
     
     List<RestaurantCategory> findByCategory(Category category);
+    
     @Modifying
     @Query("DELETE FROM RestaurantCategory rc WHERE rc.restaurant = :restaurant")
     void deleteByRestaurant(Restaurant restaurant);

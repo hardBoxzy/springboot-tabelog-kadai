@@ -2,11 +2,13 @@ package com.example.nagoyameshi.controller;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,19 +17,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.nagoyameshi.entity.Category;
+import com.example.nagoyameshi.entity.Favorite;
 import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.entity.Review;
+import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.ReservationInputForm;
 import com.example.nagoyameshi.repository.CategoryRepository;
+import com.example.nagoyameshi.repository.FavoriteRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
+import com.example.nagoyameshi.repository.ReviewRepository;
+import com.example.nagoyameshi.repository.UserRepository;
+import com.example.nagoyameshi.security.UserDetailsImpl;
 
 @Controller
 @RequestMapping("/restaurants")
 public class RestaurantController {
+	
+	private final UserRepository userRepository;
+	private final FavoriteRepository favoriteRepository;
     private final RestaurantRepository restaurantRepository;        
     private final CategoryRepository categoryRepository;
-    public RestaurantController(RestaurantRepository restaurantRepository,CategoryRepository categoryRepository) {
+    private final ReviewRepository reviewRepository;
+    public RestaurantController(RestaurantRepository restaurantRepository,CategoryRepository categoryRepository, 
+    		UserRepository userRepository, FavoriteRepository favoriteRepository,ReviewRepository reviewRepository) {
         this.restaurantRepository = restaurantRepository;
-        this.categoryRepository  = categoryRepository;            
+        this.categoryRepository  = categoryRepository;
+        this.userRepository  = userRepository;
+        this.favoriteRepository  = favoriteRepository;
+        this.reviewRepository  = reviewRepository;
     }     
   
     @GetMapping
@@ -80,11 +97,23 @@ public class RestaurantController {
     }
     		
     @GetMapping("/{id}")
-    public String show(@PathVariable(name = "id") Integer id, Model model) {
+    public String show(@PathVariable(name = "id") Integer id,
+    		@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,Model model) {
     	Restaurant restaurant = restaurantRepository.getReferenceById(id);
-        
+    	List<Review> newReviews = reviewRepository.findTop6ByRestaurantOrderByCreatedAtDesc(restaurant);
+        model.addAttribute("newReviews", newReviews);
         model.addAttribute("restaurant", restaurant);         
         model.addAttribute("reservationInputForm", new ReservationInputForm());
+        
+        if (userDetailsImpl != null) {
+            User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
+            Optional<Favorite> favorite = favoriteRepository.findFirstByUserAndRestaurant(user, restaurant);
+            // 箱の中にデータがあれば true、なければ false を渡す
+            model.addAttribute("isFavorite", favorite.isPresent());
+        } else {
+            // 未ログインなら確実にお気に入りではない（false）
+            model.addAttribute("isFavorite", false);
+        }
         
         return "restaurants/show";
     }   

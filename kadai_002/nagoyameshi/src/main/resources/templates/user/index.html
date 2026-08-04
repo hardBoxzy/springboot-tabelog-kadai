@@ -22,7 +22,9 @@
                                    <li class="breadcrumb-item active" aria-current="page">会員情報</li>
                                </ol>
                            </nav> 
-                           
+                           <div th:if="${param.subscribed}" class="alert alert-info">
+                               支払いが完了しました。
+                           </div>   
                            <h1 class="mb-3 text-center">会員情報</h1> 
                            
                            <div class="d-flex justify-content-end align-items-end mb-3">                    
@@ -54,7 +56,21 @@
                                    <div class="col">
                                        <span th:text="${user.getFurigana()}"></span>
                                    </div>
-                               </div>            
+                               </div>
+                                           
+                               <div class="row pb-2 mb-2 border-bottom">
+                                   <div class="col-4">
+									   
+                                       <span  class="fw-bold">アカウント種類</span>
+                                       
+                                   </div>
+           
+                                   <div class="col" th:switch="${user.getRole().getName()}">
+									    <span th:case="'ROLE_ADMIN'" th:text="管理者"></span>
+									    <span th:case="'ROLE_GENERAL'" th:text="通常会員"></span>
+									    <span th:case="'ROLE_PREMIUM'" th:text="有料会員"></span>
+									</div>
+                               </div>
                                
                                <div class="row pb-2 mb-2 border-bottom">
                                    <div class="col-4">

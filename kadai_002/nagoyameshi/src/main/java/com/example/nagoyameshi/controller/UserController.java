@@ -4,8 +4,8 @@ package com.example.nagoyameshi.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,17 +25,21 @@ import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.UserEditForm;
 import com.example.nagoyameshi.repository.UserRepository;
 import com.example.nagoyameshi.security.UserDetailsImpl;
+import com.example.nagoyameshi.service.StripeService;
 import com.example.nagoyameshi.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
     private final UserRepository userRepository;    
     private final UserService userService; 
-    
-    public UserController(UserRepository userRepository, UserService userService) {
+    private final StripeService stripeService;
+    public UserController(UserRepository userRepository, UserService userService, StripeService stripeService) {
             this.userRepository = userRepository;     
             this.userService = userService;    
+            this.stripeService = stripeService;  
     }    
     
     @GetMapping
@@ -92,5 +96,14 @@ public class UserController {
      SecurityContextHolder.getContext().setAuthentication(newAuth);
      
         return "redirect:/user";
-    }    
+    } 
+    
+    @GetMapping("/subscription")
+    public String subscription(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,HttpServletRequest httpServletRequest, Model model) {        
+         
+      //StripeServiceクラスに定義したcreateStripeSession()メソッドを実行してセッションIDを取得し、それをビューに渡す処理
+        String sessionId = stripeService.createStripeSession(userDetailsImpl.getUser().getId(), httpServletRequest);
+        model.addAttribute("sessionId", sessionId);
+        return "user/subscription/confirm";
+    }
 }

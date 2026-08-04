@@ -97,18 +97,17 @@ public class AdminRestaurantController {
     public String edit(@PathVariable(name = "id") Integer id, Model model) {
     	Restaurant restaurant = restaurantRepository.getReferenceById(id);
     	String imageName = restaurant.getImageName() ;
-    			
-    	List<RestaurantCategory> restaurantCategories = restaurantCategoryRepository.findByRestaurant(restaurant);
-     // 1. 中間テーブルのリストから、カテゴリーID（Integer）のリストを抽出する
-        List<Integer> categoryIds = restaurantCategories.stream()//forの代わりに使用、restaurantCategories＝{  "restaurant": 10, "category": { "id": 3, "name": "ラーメン" } }, {  "restaurant": 10, "category": { "id": 5, "name": "中華" } }
-                .map(restaurantCategory -> restaurantCategory.getCategory().getId())//mapは流れてきたデータを、別の形に変換（マッピング）します。getCategory()＝{ "id": 3, "name": "ラーメン" }、getId()＝"id": 3
-                
-                .toList();// 新しい List にまとめる
-        RestaurantEditForm restaurantEditForm = new RestaurantEditForm(restaurant.getId(), restaurant.getName(), categoryIds,null,restaurant.getDescription(), restaurant.getPrice(), restaurant.getCapacity(), restaurant.getPostalCode(), restaurant.getAddress(), restaurant.getPhoneNumber());
+        List<Integer> categoryIds = restaurantService.getCategoryIds(restaurant);
+        List<Integer> dayIds = restaurantService.getCategoryIds(restaurant);
         
-        // 3. 画面表示に必要な「すべてのカテゴリー一覧」もModelに渡す
+        RestaurantEditForm restaurantEditForm = new RestaurantEditForm(
+        		restaurant.getId(), restaurant.getName(),categoryIds,
+        		null,restaurant.getDescription(), restaurant.getPrice(), 
+        		restaurant.getCapacity(), restaurant.getPostalCode(), restaurant.getAddress(), 
+        		restaurant.getPhoneNumber(), dayIds);
+                
         List<Category> categories = categoryRepository.findAll();
-        model.addAttribute("categories", categories);
+        model.addAttribute("categories", categories);//  画面表示に必要な「すべてのカテゴリー一覧」もModelに渡す
         
         model.addAttribute("imageName", imageName);
         model.addAttribute("restaurantEditForm", restaurantEditForm);

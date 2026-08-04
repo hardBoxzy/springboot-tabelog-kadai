@@ -57,8 +57,16 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<RestaurantCategory> restaurantCategories;
 
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Holiday> holidays;
+    
     // ゲッターを追加
     public List<RestaurantCategory> getRestaurantCategories() {
         return this.restaurantCategories;
+    }
+    
+    // ゲッターを追加
+    public List<Holiday> getHolidays() {
+        return this.holidays;
     }
 }

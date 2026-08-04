@@ -62,14 +62,14 @@
 									   <div class="row g-0">
 										   <div th:if="${#fields.hasErrors('categoryIds')}" class="text-danger small mb-2" th:errors="*{categoryIds}"></div>                           
 	                                       <div th:each="category : ${categories}" class="form-check col-4 mb-2">
-								            <input type="checkbox" 
-								                   th:field="*{categoryIds}" 
-								                   th:value="${category.id}" 
-								                   class="form-check-input" 
-								                   th:id="'category_' + ${category.id}">
-								            <label class="form-check-label" 
-								                   th:for="'category_' + ${category.id}" 
-								                   th:text="${category.name}"style="margin-left: -5px;">ラーメン</label>
+									            <input type="checkbox" 
+									                   th:field="*{categoryIds}" 
+									                   th:value="${category.id}" 
+									                   class="form-check-input" 
+									                   th:id="'category_' + ${category.id}">
+									            <label class="form-check-label" 
+									                   th:for="'category_' + ${category.id}" 
+									                   th:text="${category.name}"style="margin-left: -5px;">ラーメン</label>
 								            </div>
 							            </div>
                                    </div>
@@ -104,6 +104,27 @@
                                        <input type="number" class="form-control" th:field="*{capacity}">                                
                                    </div>                                    
                                </div>                                                                
+                                
+                                <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="description" class="col-form-label text-md-left fw-bold">定休日</label>
+                                   </div>
+                                   <div class="col-md-8"> 
+								        <div class="row g-0">                           
+								            <div th:each="dayId : ${#lists.toList({ 1, 2, 3, 4, 5, 6, 0})}" class="form-check col-4 mb-2">
+								                <input type="checkbox" 
+								                       th:field="*{holidays}" 
+								                       th:value="${dayId}" 
+								                       class="form-check-input" 
+								                       th:id="'holiday_' + ${dayId}">
+								                <label class="form-check-label" 
+								                       th:for="'holiday_' + ${dayId}"
+								                       th:text="${#locale.language == 'ja' ? #strings.arraySplit('日,月,火,水,木,金,土', ',')[dayId] + '曜日' : dayId}" 
+								                       style="margin-left: -5px;">火曜日</label>
+								            </div>
+								        </div>
+								    </div>
+                               </div>
                                                                                                                        
                                <div class="form-group row mb-3">
                                    <div class="col-md-4">

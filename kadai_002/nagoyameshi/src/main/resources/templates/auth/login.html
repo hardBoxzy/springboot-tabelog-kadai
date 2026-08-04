@@ -36,13 +36,26 @@
                                </div>
                            </form>
                            
-                           <div class="text-center">
+                           <div class="text-center mb-5">
                                <a th:href="@{/signup}">
                                    会員登録
                                </a>
                            </div>
                            
                             <form th:action="@{/login}" method="post">
+                               <div class="form-group mb-2 ">
+                                   <input type="hidden" class="form-control" name="username" autocomplete="email"  autofocus value="yoshikatsu.samurai@example.com">
+                               </div>
+                               <div class="form-group mb-3">
+                                   <input type="hidden" class="form-control" name="password" autocomplete="new-password" value="password">
+                               </div>
+                               
+                               <div class="form-group d-flex justify-content-center my-4 ">
+                                   <button type="submit" class="btn text-white shadow-sm w-100 samuraitravel-btn">仮アカウント(通常会員)でログイン</button>
+                               </div>
+                           </form>
+                           
+                           <form th:action="@{/login}" method="post">
                                <div class="form-group mb-3">
                                    <input type="hidden" class="form-control" name="username" autocomplete="email"  autofocus value="taro.samurai@example.com">
                                </div>
@@ -51,7 +64,7 @@
                                </div>
                                
                                <div class="form-group d-flex justify-content-center my-4">
-                                   <button type="submit" class="btn text-white shadow-sm w-100 samuraitravel-btn">仮アカウントでログイン</button>
+                                   <button type="submit" class="btn text-white shadow-sm w-100 samuraitravel-btn">仮アカウント(有料会員)でログイン</button>
                                </div>
                            </form>
                            
@@ -64,7 +77,7 @@
                                </div>
                                
                                <div class="form-group d-flex justify-content-center my-4">
-                                   <button type="submit" class="btn text-white shadow-sm w-100 samuraitravel-btn">仮管理者アカウントでログイン</button>
+                                   <button type="submit" class="btn text-white shadow-sm w-100 samuraitravel-btn">仮アカウント(管理者)でログイン</button>
                                </div>
                            </form>
                                                                             

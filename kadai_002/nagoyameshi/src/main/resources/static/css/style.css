@@ -127,6 +127,10 @@ footer {
     max-width: 300px;
 }
 
+.score{
+	color: rgb(255, 179, 74) !important;
+}
+
 @media screen and (min-width: 1400px) {
  .samuraitravel-container {
    max-width: 1200px;

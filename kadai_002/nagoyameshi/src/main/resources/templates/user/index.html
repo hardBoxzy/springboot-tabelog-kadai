@@ -24,7 +24,10 @@
                            </nav> 
                            <div th:if="${param.subscribed}" class="alert alert-info">
                                支払いが完了しました。
-                           </div>   
+                           </div> 
+                           <div th:if="${param.canceled}" class="alert alert-info">
+                               支払いがキャンセルされました。
+                           </div>  
                            <h1 class="mb-3 text-center">会員情報</h1> 
                            
                            <div class="d-flex justify-content-end align-items-end mb-3">                    
@@ -66,10 +69,15 @@
                                    </div>
            
                                    <div class="col" th:switch="${user.getRole().getName()}">
-									    <span th:case="'ROLE_ADMIN'" th:text="管理者"></span>
-									    <span th:case="'ROLE_GENERAL'" th:text="通常会員"></span>
-									    <span th:case="'ROLE_PREMIUM'" th:text="有料会員"></span>
+									    <div th:case="'ROLE_ADMIN'" th:text="管理者"></div>
+									    <div th:case="'ROLE_GENERAL'" th:text="通常会員"></div>
+									    <div th:case="'ROLE_PREMIUM'" th:text="有料会員プランに加入中です。"></div>
+										    <a th:if="${user.getRole().getName() == 'ROLE_PREMIUM'}" th:href="@{/user/portal}" class="btn btn-danger ">サブスクリプションの解約・カード変更</a>
+											    
+											
+										
 									</div>
+									
                                </div>
                                
                                <div class="row pb-2 mb-2 border-bottom">

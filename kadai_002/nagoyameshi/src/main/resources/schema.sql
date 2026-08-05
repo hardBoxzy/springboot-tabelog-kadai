@@ -101,3 +101,10 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
+
+CREATE TABLE IF NOT EXISTS stripe_customers (
+	 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	 user_id INT NOT NULL,
+    stripe_customer_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);

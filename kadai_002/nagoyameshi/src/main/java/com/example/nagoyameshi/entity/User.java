@@ -62,4 +62,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "job_id")
     private Job job;
+    
+    
+    
+    
 }

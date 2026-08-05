@@ -74,6 +74,8 @@ public class UserService {
         return user ;
     }
     
+    
+    
     // メールアドレスで探し出したアカウントがアクティブかどうかをチェックする
     public boolean isEnabled(String email) {
         User user = userRepository.findByEmail(email);

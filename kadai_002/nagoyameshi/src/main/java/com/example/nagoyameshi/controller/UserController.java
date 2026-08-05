@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.nagoyameshi.entity.User;
@@ -43,10 +44,32 @@ public class UserController {
     }    
     
     @GetMapping
-    public String index(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {         
+    public String index(@RequestParam(name = "subscribed", required = false, defaultValue = "false") Boolean isSubscribed,
+            @RequestParam(name = "canceled", required = false, defaultValue = "false") Boolean isCanceled,
+            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {         
         User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());  
         
         model.addAttribute("user", user);
+        
+        if (isSubscribed) {
+        	// --- ユーザー情報の更新処理の直後に追加します ---
+
+            // 1. 最新のユーザー情報（更新後のUserエンティティ）を使って、新しいUserDetailsを作成する
+            // ※教材の仕様に合わせて、新しくUserDetailsImplをnewするか、既存のログイン主体のオブジェクトを書き換えます。
+               Collection<GrantedAuthority> authorities = new ArrayList<>();         
+               authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
+               UserDetailsImpl newUserDetails = new UserDetailsImpl(user, authorities);
+
+            // 2. 新しい認証オブジェクト（Authentication）を作成する
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                newUserDetails, 
+                newUserDetails.getPassword(), 
+                newUserDetails.getAuthorities()
+            );
+
+            // 3. Spring Securityのコンテキストに新しい認証情報をセットして、セッションを上書きする
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
+        }
         
         return "user/index";
     }

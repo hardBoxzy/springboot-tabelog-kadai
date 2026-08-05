@@ -229,3 +229,8 @@ INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_
 INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (22, 10, 1, 2, '2店内の設備（個室など）が充実していました。', '2023-04-01', '2023-04-02');
 INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (23, 11, 1, 0, '2フリーWi-Fiが快適で助かりました。', '2023-04-01', '2023-04-02');
 INSERT IGNORE INTO reviews (id, restaurant_id, user_id, score, content, created_at, updated_at) VALUES (24, 12, 1, 5, '2清潔感があり、気持ちよく食事ができました。', '2023-04-01', '2023-04-02');
+
+-- stripe_customers（中間テーブル）の仮データ
+-- INSERT IGNORE INTO stripe_customers (id, user_id, stripe_customer_id) VALUES 
+-- (1, 1,'cus_V03S0ydDiMhutY'),
+-- (2, 4,'cus_V0PZLLOwlUmlBk'); 

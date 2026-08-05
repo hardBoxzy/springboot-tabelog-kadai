@@ -53,12 +53,15 @@ public class Restaurant {
 
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Timestamp updatedAt;
-    
+    //fetch = FetchType.EAGER（即時読み込み）にすると、店舗（Restaurant）のデータを1件取得するだけで、毎回自動的にカテゴリーや定休日のデータも同時にデータベースから裏で取得（JOIN）されます。
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<RestaurantCategory> restaurantCategories;
-
+    
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Holiday> holidays;
+    //cascade = CascadeType.REMOVE親の削除を子にも連動  orphanRemoval = true親との繋がりを失った子（＝孤児：orphan）を、自動的にデータベース
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Reservation> reservations;
     
     // ゲッターを追加
     public List<RestaurantCategory> getRestaurantCategories() {

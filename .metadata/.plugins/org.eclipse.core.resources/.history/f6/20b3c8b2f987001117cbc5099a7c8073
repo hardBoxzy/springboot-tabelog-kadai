@@ -1,9 +1,0 @@
-
-package com.example.samuraitravel.repository;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-
-public interface restaurantRepository extends JpaRepository<Restaurant, Integer> {
-
-}

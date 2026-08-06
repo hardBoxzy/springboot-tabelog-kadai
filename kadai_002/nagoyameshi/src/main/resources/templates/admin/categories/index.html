@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<div th:replace="~{fragment :: meta}"></div>
+
+	<div th:replace="~{fragment :: styles}"></div>
+
+	<title>店舗一覧</title>
+</head>
+
+<body>
+	<div class="samuraitravel-wrapper">
+		<!-- ヘッダー -->
+		<div th:replace="~{fragment :: header}"></div>
+
+		<main>
+			<div class="container pt-4 pb-5 samuraitravel-container">
+				<div class="row justify-content-center">
+					<div class="col-xxl-10 col-xl-10 col-lg-11">
+
+						<h1 class="mb-4 text-center">カテゴリー一覧</h1>
+
+						<div class="d-flex justify-content-between align-items-end flex-wrap">
+							<form method="get" th:action="@{/admin/categories}" class="mb-3">
+								<div class="input-group">
+									<input type="text" class="form-control" name="keyword" th:value="${keyword}"
+										placeholder="カテゴリー名">
+									<button type="submit" class="btn text-white shadow-sm samuraitravel-btn">検索</button>
+								</div>
+							</form>
+
+							
+								
+								
+						</div>
+
+						<div th:if="${successMessage}" class="alert alert-info">
+							<span th:text="${successMessage}"></span>
+						</div>
+
+						<div class="row">
+							<div th:each="category, status : ${categoryPage}" class="col-md-6 mb-2">
+
+								<div class="d-flex align-items-center p-2"
+									th:classappend="${status.index % 2 != 0} ? 'justify-content-md-end' : ''">
+
+									<!-- 通常時の表示（初期状態） -->
+									<div th:id="${'view-container-' + category.getId()}" class="d-flex align-items-center pb-2 border-bottom w-100" style="max-width: 350px;">
+               
+										<div class="d-flex align-items-center flex-grow-1">
+											<span th:text="${category.getId()}" class="text-secondary me-3"
+												style="min-width: 30px;"></span>
+											<!-- クラス名「category-name-text」を付与 -->
+											<span th:text="${category.getName()}"
+												class="fw-bold category-name-text"></span>
+										</div>
+										<div style="width: 100px; min-width: 100px;" class="text-end">
+											<!-- 編集ボタンに onclick イベントを追加 -->
+											<a href="#" class="me-3"
+												th:onclick="|toggleEdit('${category.getId()}')|">編集</a>
+											<a href="#" class="samuraitravel-link-danger" data-bs-toggle="modal"
+												th:data-bs-target="${'#deleteRestaurantModal' + category.getId()}">削除</a>
+										</div>
+									</div>
+
+									<!-- ① 編集ボタンを押した時の入力フォーム（初期状態は d-none で非表示） -->
+									 <form th:id="${'edit-form-' + category.getId()}" method="post" th:action="@{/admin/categories/__${category.getId()}__/update}" class="d-none d-flex align-items-center pb-2 border-bottom w-100" style="max-width: 350px;">
+             
+										<div class="d-flex align-items-center flex-grow-1">
+											<span th:text="${category.getId()}" class="text-secondary me-3"
+												style="min-width: 30px;"></span>
+											<!-- カテゴリー名入力フォーム -->
+											<input type="text" name="name" th:value="${category.getName()}"
+												class="form-control form-control-sm fw-bold" required>
+										</div>
+										<div style="width: 100px; min-width: 100px;" class="text-end">
+											<!-- ② 保存ボタン（submit）と キャンセルボタン -->
+											<button type="submit"
+												class="btn btn-link btn-sm p-0 me-2 text-success decoration-none">保存</button>
+											<button type="button"
+												class="btn btn-link btn-sm p-0 text-secondary decoration-none"
+												th:onclick="|toggleEdit('${category.getId()}')|">取消</button>
+										</div>
+									</form>
+
+								</div>
+
+								<!-- 削除用モーダル -->
+								<div class="modal fade" th:id="${'deleteRestaurantModal' + category.getId()}"
+									tabindex="-1"
+									th:aria-labelledby="${'deleteRestaurantModalLabel' + category.getId()}">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title"
+													th:id="${'deleteRestaurantModalLabel' + category.getId()}"
+													th:text="${category.getName() + 'を削除してもよろしいですか？'}"></h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"
+													aria-label="閉じる"></button>
+											</div>
+											<div class="modal-footer">
+												<form method="post"
+													th:action="@{/admin/categories/__${category.getId()}__/delete}">
+													<button type="submit"
+														class="btn samuraitravel-btn-danger text-white shadow-sm">削除</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+						</div>
+
+						<!-- ページネーション -->
+						<div th:if="${categoryPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+							<nav aria-label="店舗一覧ページ">
+								<ul class="pagination">
+									<li class="page-item">
+										<span th:if="${categoryPage.isFirst()}" class="page-link disabled">前</span>
+										<a th:unless="${categoryPage.isFirst()}"
+											th:href="@{/admin/categories(page = ${categoryPage.getNumber() - 1}, keyword = ${keyword})}"
+											class="page-link samuraitravel-page-link">前</a>
+									</li>
+									<li th:each="i : ${#numbers.sequence(0, categoryPage.getTotalPages() - 1)}"
+										class="page-item">
+										<span th:if="${i == categoryPage.getNumber()}"
+											class="page-link active samuraitravel-active" th:text="${i + 1}"></span>
+										<a th:unless="${i == categoryPage.getNumber()}"
+											th:href="@{/admin/categories(page = ${i}, keyword = ${keyword})}"
+											class="page-link samuraitravel-page-link" th:text="${i + 1}"></a>
+									</li>
+									<li class="page-item">
+										<span th:if="${categoryPage.isLast()}" class="page-link disabled">次</span>
+										<a th:unless="${categoryPage.isLast()}"
+											th:href="@{/admin/categories(page = ${categoryPage.getNumber() + 1}, keyword = ${keyword})}"
+											class="page-link samuraitravel-page-link">次</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+						
+						<div class="d-flex justify-content-end align-items-end flex-wrap">
+							<form  method="post" th:action="@{/admin/categories/create}" class="mb-3">
+								<div class="input-group">
+									<input type="text" class="form-control" name="newCategoryName" th:value="${newCategoryName}"
+										placeholder="追加したいカテゴリー名">
+									<button type="submit" class="btn text-white shadow-sm samuraitravel-btn">登録</button>
+								</div>
+							</form>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- フッター -->
+		<div th:replace="~{fragment :: footer}"></div>
+	</div>
+
+	<!-- Bootstrap -->
+	<div th:replace="~{fragment :: scripts}"></div>
+	<script>
+		function toggleEdit(id) {
+			// 通常表示コンテナと編集フォームを取得
+			const viewContainer = document.getElementById('view-container-' + id);
+			const editForm = document.getElementById('edit-form-' + id);
+
+			// d-none クラスを付け替えることで表示・非表示を切り替え
+			if (viewContainer.classList.contains('d-none')) {
+				viewContainer.classList.remove('d-none');
+				editForm.classList.add('d-none');
+			} else {
+				viewContainer.classList.add('d-none');
+				editForm.classList.remove('d-none');
+
+				// フォームを開いたとき、入力欄に自動でフォーカスを当てる
+				editForm.querySelector('input[type="text"]').focus();
+			}
+		}
+	</script>
+</body>
+
+</html>

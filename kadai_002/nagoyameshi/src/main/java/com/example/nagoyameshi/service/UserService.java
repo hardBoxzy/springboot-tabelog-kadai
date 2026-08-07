@@ -7,11 +7,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.nagoyameshi.entity.Job;
 import com.example.nagoyameshi.entity.Role;
+import com.example.nagoyameshi.entity.TemperaryPassword;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.SignupForm;
 import com.example.nagoyameshi.form.UserEditForm;
+import com.example.nagoyameshi.form.UserPasswordEditForm;
 import com.example.nagoyameshi.repository.JobRepository;
 import com.example.nagoyameshi.repository.RoleRepository;
+import com.example.nagoyameshi.repository.TemperaryPasswordRepository;
 import com.example.nagoyameshi.repository.UserRepository;
 
 @Service
@@ -20,12 +23,13 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final JobRepository jobRepository;
     private final PasswordEncoder passwordEncoder;
-    
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,JobRepository jobRepository) {
+    private final TemperaryPasswordRepository temperaryPasswordRepository;
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,JobRepository jobRepository,TemperaryPasswordRepository temperaryPasswordRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;        
         this.passwordEncoder = passwordEncoder;
         this.jobRepository = jobRepository;
+        this.temperaryPasswordRepository  = temperaryPasswordRepository;
     }    
     
     @Transactional
@@ -61,6 +65,28 @@ public class UserService {
         user.setEmail(userEditForm.getEmail());      
         
         userRepository.save(user);
+    } 
+    
+    @Transactional
+    public TemperaryPassword createTemperaryPassword(UserPasswordEditForm userPasswordEditForm) {
+    	User user = userRepository.findByEmail(userPasswordEditForm.getEmail());
+    	TemperaryPassword temperaryPassword = temperaryPasswordRepository.findByUser(user);
+    	String password = passwordEncoder.encode(userPasswordEditForm.getPassword());
+    	if(temperaryPassword != null){
+    		temperaryPassword.setPassword(password);
+    	}else {
+    		temperaryPassword = new TemperaryPassword();
+    		temperaryPassword.setUser(user);
+    		temperaryPassword.setPassword(password);
+    	}
+        return temperaryPasswordRepository.save(temperaryPassword);
+    } 
+    
+    @Transactional
+    public User userPasswordEdit( User user) {
+        TemperaryPassword temperaryPassword = temperaryPasswordRepository.findByUser(user);
+        user.setPassword(temperaryPassword.getPassword());
+        return userRepository.save(user);
     } 
     
     // メールアドレスが登録済みかどうかをチェックする

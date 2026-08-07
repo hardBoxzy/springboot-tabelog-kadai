@@ -24,7 +24,6 @@ import com.example.nagoyameshi.form.ReviewEditForm;
 import com.example.nagoyameshi.form.ReviewRegisterForm;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.repository.ReviewRepository;
-import com.example.nagoyameshi.repository.UserRepository;
 import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.ReviewService;
 
@@ -34,13 +33,11 @@ import com.example.nagoyameshi.service.ReviewService;
 @RequestMapping("/restaurants")
 public class ReviewController {
 	private final RestaurantRepository restaurantRepository;  
-    private final UserRepository userRepository;  
     private final ReviewRepository reviewRepository;
     private final ReviewService reviewService;
-    public ReviewController( RestaurantRepository restaurantRepository, UserRepository userRepository, ReviewRepository reviewRepository, ReviewService reviewService) {
+    public ReviewController( RestaurantRepository restaurantRepository, ReviewRepository reviewRepository, ReviewService reviewService) {
     	this.reviewRepository = reviewRepository;
         this.restaurantRepository = restaurantRepository;  
-        this.userRepository = userRepository;  
         this.reviewService = reviewService;
     }  
 	

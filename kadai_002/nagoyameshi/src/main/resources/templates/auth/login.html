@@ -36,11 +36,18 @@
                                </div>
                            </form>
                            
-                           <div class="text-center mb-5">
-                               <a th:href="@{/signup}">
-                                   会員登録
-                               </a>
-                           </div>
+							 <div class="d-flex align-items-center justify-content-between pb-2 border-bottom w-100">
+							    <div>
+							        <a th:href="@{/signup}">
+							            会員登録
+							        </a>
+							    </div>
+							    <div class="text-end">
+							        <a class="text-danger" th:href="@{/userPasswordEdit}">
+							            パスワード忘れた方
+							        </a>
+							    </div>
+							</div>
                            
                             <form th:action="@{/login}" method="post">
                                <div class="form-group mb-2 ">

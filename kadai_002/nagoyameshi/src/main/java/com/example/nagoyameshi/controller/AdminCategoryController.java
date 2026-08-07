@@ -16,21 +16,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.nagoyameshi.entity.Category;
 import com.example.nagoyameshi.repository.CategoryRepository;
-import com.example.nagoyameshi.repository.RestaurantCategoryRepository;
-import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.service.CategoryService;
 
 @Controller
 @RequestMapping("/admin/categories")
 public class AdminCategoryController {
-    private final RestaurantRepository restaurantRepository; 
     private final CategoryService categoryService;   
-    private final RestaurantCategoryRepository restaurantCategoryRepository;
     private final CategoryRepository categoryRepository;
-    public AdminCategoryController(RestaurantRepository restaurantRepository,CategoryService categoryService, RestaurantCategoryRepository restaurantCategoryRepository, CategoryRepository categoryRepository) {
-        this.restaurantRepository = restaurantRepository; 
+    public AdminCategoryController(CategoryService categoryService, CategoryRepository categoryRepository) {
+        
         this.categoryService =  categoryService;
-        this.restaurantCategoryRepository  = restaurantCategoryRepository;
         this.categoryRepository  = categoryRepository;
     }	
     

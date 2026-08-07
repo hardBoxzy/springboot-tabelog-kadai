@@ -16,6 +16,7 @@ import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.entity.VerificationToken;
 import com.example.nagoyameshi.event.SignupEventPublisher;
 import com.example.nagoyameshi.form.SignupForm;
+import com.example.nagoyameshi.form.UserPasswordEditForm;
 import com.example.nagoyameshi.service.UserService;
 import com.example.nagoyameshi.service.VerificationTokenService;
 
@@ -104,6 +105,53 @@ public class AuthController {
         return "auth/verify";         
     }    
     
+    @GetMapping("/userPasswordEdit")
+    public String userPasswordEdit(Model model) {        
+        model.addAttribute("userPasswordEditForm", new UserPasswordEditForm());
+        return "auth/userPasswordEdit";
+    }  
+    
+    @PostMapping("/userPasswordEdit")
+    public String userPasswordEdit(@ModelAttribute @Validated UserPasswordEditForm userPasswordEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {      
+        // メールアドレスが登録済みであれば、BindingResultオブジェクトにエラー内容を追加する
+        if (!userService.isEmailRegistered(userPasswordEditForm.getEmail())) {
+	            FieldError fieldError = new FieldError(bindingResult.getObjectName(), "email", "登録されていないメールアドレスです。");
+	            bindingResult.addError(fieldError);
+        }
+        // パスワードとパスワード（確認用）の入力値が一致しなければ、BindingResultオブジェクトにエラー内容を追加する
+        if (!userService.isSamePassword(userPasswordEditForm.getPassword(), userPasswordEditForm.getPasswordConfirmation())) {
+            FieldError fieldError = new FieldError(bindingResult.getObjectName(), "password", "パスワードが一致しません。");
+            bindingResult.addError(fieldError);
+        }
+        if (bindingResult.hasErrors()) {
+            return "auth/userPasswordEdit";
+        }
+        User createdUser = userService.createTemperaryPassword(userPasswordEditForm).getUser();
+        String requestUrl = new String(httpServletRequest.getRequestURL());
+        signupEventPublisher.publishSignupEvent(createdUser, requestUrl);
+        redirectAttributes.addFlashAttribute("successMessage", "ご入力いただいたメールアドレスに認証メールを送信しました。メールに記載されているリンクをクリックし、パスワードリセットを完了してください。");        
+        
+        return "redirect:/";
+    }  
+    
+    @GetMapping("/userPasswordEdit/verify")
+    public String userPasswordEditVerify(@RequestParam(name = "token") String token, Model model) {
+        VerificationToken verificationToken = verificationTokenService.getVerificationToken(token);
+        
+        if (verificationToken != null) {
+            User user = verificationToken.getUser();  
+            userService.enableUser(user);
+            
+            userService.userPasswordEdit(user);
+            String successMessage = "パスワードリセットが完了しました。";
+            model.addAttribute("successMessage", successMessage);            
+        } else {
+            String errorMessage = "トークンが無効です。";
+            model.addAttribute("errorMessage", errorMessage);
+        }
+        
+        return "auth/verify";         
+    }    
 }
 
   

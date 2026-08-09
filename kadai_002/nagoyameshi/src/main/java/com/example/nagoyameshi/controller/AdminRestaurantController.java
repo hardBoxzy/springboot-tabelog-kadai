@@ -1,10 +1,15 @@
 
 package com.example.nagoyameshi.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -29,6 +34,8 @@ import com.example.nagoyameshi.repository.CategoryRepository;
 import com.example.nagoyameshi.repository.RestaurantCategoryRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.service.RestaurantService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/admin/restaurants")
@@ -93,6 +100,62 @@ public class AdminRestaurantController {
         return "redirect:/admin/restaurants";
     }
     
+    @GetMapping("/download")
+    public void downloadCsv(@RequestParam(name = "keyword", required = false) String keyword,
+                            HttpServletResponse response) throws IOException 
+    {
+    	Page<Restaurant> restaurantPage;  
+    	// 1. ソート条件を組み立てる
+        Sort sort = Sort.by("createdAt").descending(); 
+        // ★ポイント: ページ制限をかけずに全件取得するため、サイズに Integer.MAX_VALUE を指定する
+        Pageable allPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+        
+   	 if (keyword != null && !keyword.isEmpty()) {
+   		 restaurantPage = restaurantRepository.findByNameLike("%" + keyword + "%", allPageable);                
+        } else {
+       	 restaurantPage = restaurantRepository.findAll(allPageable);
+        }  
+        
+        // ★ポイント: .getContent() を使って Page から List<Restaurant> に変換する
+        List<Restaurant> restaurants = restaurantPage.getContent();
+
+        // 3. レスポンスヘッダーの設定
+        response.setContentType("text/csv; charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=\"restaurants.csv\"");
+
+        // 4. CSVデータの書き込み
+        try (PrintWriter writer = response.getWriter()) {
+            writer.write('\ufeff'); // Excel文字化け防止用BOM
+            writer.println("店舗ID,店舗名,画像名,説明,料金,人数,郵便番号,住所,電話番号,作成時間,更新時間");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
+            for (Restaurant r : restaurants) {
+                String createdAtStr = "";
+                if (r.getCreatedAt() != null) {
+                    createdAtStr = r.getCreatedAt().toLocalDateTime().format(formatter);
+                }
+                String updatedAtStr = "";
+                if (r.getUpdatedAt() != null) {
+                	updatedAtStr = r.getCreatedAt().toLocalDateTime().format(formatter);
+                }
+                writer.println(String.format("%d,%s,%s,%s,%d,%d,%s,%s,%s,%s,%s", 
+                    r.getId(), 
+                    escapeCsv(r.getName()), 
+                    escapeCsv(r.getImageName()), 
+                    escapeCsv(r.getDescription()),
+                    r.getPrice(),
+                    r.getCapacity(),
+                    escapeCsv(r.getPostalCode()), 
+                    escapeCsv(r.getAddress()), 
+                    escapeCsv(r.getPhoneNumber()), 
+                    createdAtStr,
+                    updatedAtStr
+                ));
+            }
+        }
+    }
+    
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable(name = "id") Integer id, Model model) {
     	Restaurant restaurant = restaurantRepository.getReferenceById(id);
@@ -136,5 +199,17 @@ public class AdminRestaurantController {
         redirectAttributes.addFlashAttribute("successMessage", "民宿を削除しました。");
         
         return "redirect:/admin/restaurants";
-    }   
+    }
+    
+    
+    
+    // カンマや改行が含まれる文字列を安全にCSV用にエスケープする補助メソッド
+    private String escapeCsv(String value) {
+        if (value == null) return "";
+        if (value.contains(",") || value.contains("\"") || value.contains("\n") || value.contains("\r")) {
+            return "\"" + value.replace("\"", "\"\"") + "\"";
+        }
+        return value;
+    }
+    
 }

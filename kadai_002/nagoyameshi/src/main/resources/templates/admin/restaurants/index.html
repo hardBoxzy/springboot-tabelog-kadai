@@ -84,7 +84,10 @@
                                    </tr>                                      
                                </tbody>
                            </table> 
-                           
+                           <a th:href="@{/admin/restaurants/download(keyword=${keyword})}" 
+   class="btn btn-outline-primary">
+   CSVダウンロード
+</a>
                             <!-- ページネーション -->
                             <div th:if="${restaurantPage.getTotalPages() > 1}" class="d-flex justify-content-center">
                                 <nav aria-label="店舗一覧ページ">

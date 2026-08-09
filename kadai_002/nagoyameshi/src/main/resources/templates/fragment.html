@@ -119,10 +119,13 @@
        
        <!-- フッターの部品化 -->
        <div th:fragment="footer" th:remove="tag">
-           <footer>
-               <div class="d-flex justify-content-center align-items-center h-100">
-                   <p class="text-center text-muted small mb-0">&copy; SAMURAI NAGOYAMESHI All rights reserved.</p>      
-               </div>                 
+           <footer >
+			   <div class="d-flex flex-column justify-content-center align-items-center">
+				               <!-- ロゴを中央配置し、サイズを調整 -->
+				               <h3 class="text-center mt-3 "><a class="text-center text-muted link-secondary large  mb-2"  style="cursor: pointer;" th:href="@{/company}"> ABOUT US</a> </h3>
+            	
+                <p class="text-center text-muted small mb-3">&copy; SAMURAI NAGOYAMESHI All rights reserved.</p> 
+                    </div>                   
            </footer>
        </div>
    

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+   <head>
+        <div th:replace="~{fragment :: meta}"></div>   
+             
+        <div th:replace="~{fragment :: styles}"></div>
+       <title>Company</title>	
+   </head>
+   <body>
+        <div class="samuraitravel-wrapper">
+            <!-- ヘッダー -->
+            <div th:replace="~{fragment :: header}"></div>
+            
+            <main>
+                <div class="container pt-4 pb-5 samuraitravel-container">
+					 <img class=" me-1" th:src="@{/images/logo2.png}" alt="SAMURAI Travel">
+                    <!-- COMPANY -->
+		            <section id="company">
+						
+		                <h2 class="index-h2">COMPANY</h2>
+		                <h3>会社概要</h3>
+		                <table id="company-table">
+		                    <tr>
+		                        <th class="tableheader-first">会社名</th>
+		                        <td class="cell-first">株式会社NAGOYAMESHI</td>
+		                    </tr>
+		                    <tr>
+		                        <th class="tableheader">所在地</th>
+		                        <td class="cell">〒150-0043 東京都渋谷区道玄坂2丁目11-1 Gスクエア渋谷道玄坂4F<br>JR山手線「渋谷駅」より徒歩3分</td>
+		                    </tr>
+		                    <tr>
+		                        <th class="tableheader">代表者</th>
+		                        <td class="cell">代表取締役 田中 太郎</td>
+		                    </tr>
+		                    <tr>
+		                        <th class="tableheader">設立</th>
+		                        <td class="cell">2015年3月19日</td>
+		                    </tr>
+		                </table>
+		                <iframe
+		                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.7759544892483!2d139.69399665123464!3d35.65789123876098!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188caa0042e8d1%3A0xba130bea826a7aa2!2z44CSMTUwLTAwNDMg5p2x5Lqs6YO95riL6LC35Yy66YGT546E5Z2C77yS5LiB55uu77yR77yR4oiS77yR!5e0!3m2!1sja!2sjp!4v1636872991912!5m2!1sja!2sjp"
+		                    style="border:0;" allowfullscreen="" loading="lazy">
+		                </iframe>
+		            </section>
+                       
+                </div>
+            </main>
+            
+            <!-- フッター -->
+            <div th:replace="~{fragment :: footer}"></div>
+        </div>    
+        
+        <div th:replace="~{fragment :: scripts}"></div>  
+   </body>
+</html>

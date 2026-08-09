@@ -27,4 +27,12 @@ public class HomeController {
         model.addAttribute("newRestaurants", newRestaurants);    
         return "index";
     }   
+    @GetMapping("/company")
+    public String company(Model model) {
+    	List<Category> categories = categoryRepository.findAll();
+        model.addAttribute("categories", categories);
+        List<Restaurant> newRestaurants = restaurantRepository.findTop10ByOrderByCreatedAtDesc();
+        model.addAttribute("newRestaurants", newRestaurants);    
+        return "company/index";
+    }  
 }

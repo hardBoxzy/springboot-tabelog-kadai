@@ -55,7 +55,7 @@ public class StripeService {
                                 .setCurrency("jpy")     
                                 .setRecurring(
                                     SessionCreateParams.LineItem.PriceData.Recurring.builder()
-                                        .setInterval(SessionCreateParams.LineItem.PriceData.Recurring.Interval.DAY) // ★日次
+                                        .setInterval(SessionCreateParams.LineItem.PriceData.Recurring.Interval.MONTH) //頻度（MONTH：月ごと、DAY:日ごと
                                         .build())							
                                 .build())
                         .setQuantity(1L)

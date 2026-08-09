@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
+   <head>
+       <div th:replace="~{fragment :: meta}"></div>   
+            
+       <div th:replace="~{fragment :: styles}"></div>
+        <!-- Flatpickr -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+
+ 
+       <title>店舗一覧</title>   
+   </head>
+   <body>
+       <div class="samuraitravel-wrapper">
+           <!-- ヘッダー -->
+           <div th:replace="~{fragment :: header}"></div>
+           
+           <main>
+               <div class="container samuraitravel-container pb-5">
+                   <div class="row justify-content-center">
+                       <nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                           <ol class="breadcrumb mb-0">                        
+                               <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                               <li class="breadcrumb-item active" aria-current="page">店舗一覧</li>
+                           </ol>
+                       </nav>         
+           
+                       <div class="col-xl-3 col-lg-4 col-md-12">
+           					<div class="card mb-3">
+							    <div class="card-body">
+									
+							         <h5 class="card-title fw-bold">
+							            <span th:text="${#strings.substring(yearMonth, 0, 4)}">2026</span>年
+							            <!-- #strings.substring(yearMonth, 5, 7) で月を取得。先頭の0を消すために整数変換します -->
+							            <span th:text="${#conversions.convert(#strings.substring(yearMonth, 5, 7), 'Integer')}">8</span>月の総売上
+							        </h5>
+							        <!-- #numbers.formatInteger を使うと「1,500,000円」のように3桁区切りのカンマが入ります -->
+							        <p class="fs-3 text-danger fw-bold">
+							            <span th:text="${#numbers.formatInteger(totalRevenue, 1, 'COMMA')}">0</span>円
+							        </p>
+							    </div>
+							</div>
+                           <div class="card mb-3">
+                               <div class="card-header">
+                                   売上表示期間
+                               </div>
+	                               <div class="card-body">
+									<form id="revenue-form" method="get" th:action="@{/admin/revenues}">
+										<div class="form-group mb-2" id="calendar-wrapper">
+											<label for="fromCheckinDateToCheckoutDate"
+												class="col-form-label text-md-left fw-bold">年月を選択してください</label>
+											<input hidden type="text" class="form-control" id="fromCheckinDateToCheckoutDate"
+												name="yearMonth" th:value="${yearMonth}">
+										</div>
+									</form>
+                               </div>
+                           </div>                
+           
+                                
+                       </div>
+           
+                       <div class="col">                                                                          
+                           <div class="d-flex justify-content-between flex-wrap">                                
+                               <p th:if="${revenuePage.getTotalPages() > 1}" class="fs-5 mb-3" th:text="${'検索結果：' + revenuePage.getTotalElements() + '件' + '（' + (revenuePage.getNumber() + 1) + ' / ' + revenuePage.getTotalPages() + ' ページ）'}"></p> 
+                               <p th:unless="${revenuePage.getTotalPages() > 1}" class="fs-5 mb-3" th:text="${'検索結果：' + revenuePage.getTotalElements() + '件'}"></p>                                 
+                           
+
+                           
+                           </div>   
+                                                                       
+                           <table class="table w-100" style="width: 100% !important; table-layout: fixed;">
+							<thead>
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">ユーザー</th>
+									<th scope="col">金額</th>
+									<th scope="col">支払い時間</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="revenue : ${revenuePage}">
+									<td th:text="${revenue.getId()}"></td>
+									<td th:text="${revenue.getUser().getName()}"></td>
+									<td th:text="${revenue.getAmount()}"></td>
+									<td th:text="${#temporals.format(revenue.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></td>
+								</tr>
+							</tbody>
+						</table>                                                                                      
+           
+	                           <!-- ページネーション -->
+							<div th:if="${revenuePage.getTotalPages() > 1}" class="d-flex justify-content-center">
+								<nav aria-label="店舗一覧ページ">
+									<ul class="pagination">
+										<li class="page-item">
+											<span th:if="${revenuePage.isFirst()}" class="page-link disabled">前</span>
+											<a th:unless="${revenuePage.isFirst()}"
+												th:href="@{/admin/revenues(page = ${revenuePage.getNumber() - 1}, keyword = ${keyword})}"
+												class="page-link samuraitravel-page-link">前</a>
+										</li>
+										<li th:each="i : ${#numbers.sequence(0, revenuePage.getTotalPages() - 1)}"
+											class="page-item">
+											<span th:if="${i == revenuePage.getNumber()}"
+												class="page-link active samuraitravel-active" th:text="${i + 1}"></span>
+											<a th:unless="${i == revenuePage.getNumber()}"
+												th:href="@{/admin/revenues(page = ${i}, keyword = ${keyword})}"
+												class="page-link samuraitravel-page-link" th:text="${i + 1}"></a>
+										</li>
+										<li class="page-item">
+											<span th:if="${revenuePage.isLast()}" class="page-link disabled">次</span>
+											<a th:unless="${revenuePage.isLast()}"
+												th:href="@{/admin/revenues(page = ${revenuePage.getNumber() + 1}, keyword = ${keyword})}"
+												class="page-link samuraitravel-page-link">次</a>
+										</li>
+									</ul>
+								</nav>
+							</div>                                      
+                       </div>
+                   </div>
+               </div>  
+           </main>
+           
+           <!-- フッター -->
+           <div th:replace="~{fragment :: footer}"></div>
+       </div>    
+       
+       <div th:replace="~{fragment :: scripts}"></div>
+       
+       		<style>
+    /* この画面の売上期間カレンダーの幅だけを強制的に220pxに絞る */
+    #calendar-wrapper .flatpickr-calendar.inline {
+        width: 100% !important;
+    }
+    /* カレンダー内の月ボタンの並びも横幅いっぱいに広げる */
+    #calendar-wrapper .flatpickr-monthSelect-months {
+        width: 100% !important;
+        
+    }
+    /* ボタン同士の間隔や文字サイズを自動で縮小させる */
+    #calendar-wrapper .flatpickr-monthSelect-month {
+        font-size: 13px !important;
+         width: 30% !important; /* 3列なので均等に33.33%にする */
+    }
+</style>  
+       	<!-- Flatpickr -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+	<!--         ★年月プラグイン用のJSを追加 -->
+	<!--<script src="https://jsdelivr.net/npm/flatpickr@latest/dist/plugins/monthSelect/index.js"></script>  -->
+	<!-- MonthSelectPlugin用のJS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+	<script>
+		flatpickr('#fromCheckinDateToCheckoutDate', {
+			locale: 'ja', // ★日本語化を適用
+			inline: true,
+			plugins: [
+				new monthSelectPlugin({
+					shorthand: true, //defaults to false
+					dateFormat: "Y-m",
+					theme: "dark" // defaults to "light"
+				})
+			],
+			  // ★ 値が変更されたときに実行されるイベント
+			  onChange: function(selectedDates, dateStr, instance) {
+			    if (dateStr) {
+			      // フォームを特定して自動送信
+			      document.getElementById("revenue-form").submit();
+			    }
+			  }
+		  });
+	</script>
+
+	
+ </body>
+</html>

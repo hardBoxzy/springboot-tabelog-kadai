@@ -12,14 +12,11 @@ import com.example.nagoyameshi.entity.Restaurant;
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 	public Page<Restaurant> findByNameLike(String keyword, Pageable pageable);
 
-	    public Page<Restaurant> findByNameLikeOrAddressLikeOrderByCreatedAtDesc(String nameKeyword, String addressKeyword, Pageable pageable);  
-	    public Page<Restaurant> findByNameLikeOrAddressLikeOrderByPriceAsc(String nameKeyword, String addressKeyword, Pageable pageable);  
-	    public Page<Restaurant> findByAddressLikeOrderByCreatedAtDesc(String area, Pageable pageable);
-	    public Page<Restaurant> findByAddressLikeOrderByPriceAsc(String area, Pageable pageable);
-	    public Page<Restaurant> findByPriceLessThanEqualOrderByCreatedAtDesc(Integer price, Pageable pageable);
-	    public Page<Restaurant> findByPriceLessThanEqualOrderByPriceAsc(Integer price, Pageable pageable); 
-	    public Page<Restaurant> findAllByOrderByCreatedAtDesc(Pageable pageable);
-	    public Page<Restaurant> findAllByOrderByPriceAsc(Pageable pageable);   
+    // 1. キーワード検索（名前または住所）
+    Page<Restaurant> findByNameLikeOrAddressLike(String nameKeyword, String addressKeyword, Pageable pageable);  
+    
+    // 2. 価格での絞り込み
+    Page<Restaurant> findByPriceLessThanEqual(Integer price, Pageable pageable); 
 	    
 	    public List<Restaurant> findTop10ByOrderByCreatedAtDesc();
 	    

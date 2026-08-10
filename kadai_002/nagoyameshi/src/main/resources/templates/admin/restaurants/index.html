@@ -75,6 +75,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <form method="post"th:action="@{/admin/restaurants/__${restaurant.getId()}__/delete}">
+															<input hidden type="text" class="form-control" name="page" th:value="${restaurantPage.getNumber()}" placeholder="ページ番号">
                                                             <button type="submit" class="btn samuraitravel-btn-danger text-white shadow-sm">削除</button>
                                                         </form>
                                                     </div>
@@ -85,9 +86,22 @@
                                </tbody>
                            </table> 
                            <a th:href="@{/admin/restaurants/download(keyword=${keyword})}" 
-   class="btn btn-outline-primary">
-   CSVダウンロード
-</a>
+							   class="btn btn-outline-primary">
+							   CSVダウンロード
+							</a>
+
+							<!-- メッセージ表示エリア（コントローラーからの通知用） -->
+							<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+							<div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+							
+							<!-- インポート用フォーム（enctype="multipart/form-data" が必須です） -->
+							<form th:action="@{/admin/restaurants/import}" method="post" enctype="multipart/form-data" class="mb-3">
+							    <div class="input-group">
+							        <input type="file" name="file" accept=".csv" class="form-control" required>
+							        <button type="submit" class="btn btn-success">CSVインポート</button>
+							    </div>
+							</form>
+							
                             <!-- ページネーション -->
                             <div th:if="${restaurantPage.getTotalPages() > 1}" class="d-flex justify-content-center">
                                 <nav aria-label="店舗一覧ページ">

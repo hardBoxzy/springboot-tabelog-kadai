@@ -5,9 +5,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -191,5 +198,128 @@ public class RestaurantService {
 	           .map(holiday -> holiday.getDayId())
 	           .toList();
 	   return dayIds;
+   }
+   
+   public String createCSVStr(List<Restaurant> restaurants) {
+	   String result = "店舗ID,店舗名,画像名,説明,料金,人数,郵便番号,住所,電話番号,定休日,カテゴリー,作成時間,更新時間";
+	   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	   String content= "";
+	   for (Restaurant r : restaurants) {
+      	 String holidaysStr = "";
+           if (r.getHolidays() != null) {
+               holidaysStr = r.getHolidays().stream()
+                   .map(holiday -> String.valueOf(holiday.getDayId())) // 各Holidayオブジェクトから曜日名（文字列）を抽出
+                   .collect(Collectors.joining(" & ")); // それらを「 & 」で繋ぐ
+           }
+           String restaurantCategoriesStr = "";
+           if (r.getRestaurantCategories() != null) {
+          	 restaurantCategoriesStr = r.getRestaurantCategories().stream()
+                   .map(restaurantCategory -> restaurantCategory.getCategory().getName())
+                   .collect(Collectors.joining(" & ")); // それらを「 & 」で繋ぐ
+           }
+          String createdAtStr = "";
+          if (r.getCreatedAt() != null) {
+              createdAtStr = r.getCreatedAt().toLocalDateTime().format(formatter);
+          }
+          String updatedAtStr = "";
+          if (r.getUpdatedAt() != null) {
+          	updatedAtStr = r.getCreatedAt().toLocalDateTime().format(formatter);
+          }
+          content =content+ "\n"+ String.format("%d,%s,%s,%s,%d,%d,%s,%s,%s,%s,%s,%s,%s", 
+              r.getId(), 
+              escapeCsv(r.getName()), 
+              escapeCsv(r.getImageName()), 
+              escapeCsv(r.getDescription()),
+              r.getPrice(),
+              r.getCapacity(),
+              escapeCsv(r.getPostalCode()), 
+              escapeCsv(r.getAddress()), 
+              escapeCsv(r.getPhoneNumber()), 
+              escapeCsv(holidaysStr),
+              escapeCsv(restaurantCategoriesStr),
+              createdAtStr,
+              updatedAtStr
+          );
+	   }
+	   result = result + content;
+	   return result;
+   }
+   
+   // カンマや改行が含まれる文字列を安全にCSV用にエスケープする補助メソッド
+   private String escapeCsv(String value) {
+       if (value == null) return "";
+       if (value.contains(",") || value.contains("\"") || value.contains("\n") || value.contains("\r")) {
+           return "\"" + value.replace("\"", "\"\"") + "\"";
+       }
+       return value;
+   }
+   
+   public List<Restaurant> createRestaurantsByCSV(CSVParser csvParser) {
+	// 出力時と同じフォーマット（秒まで。スラッシュとハイフンの両方に対応できるようにします）
+       // ユーザーがExcelで編集して「2026/08/11 15:30:00」のようになっていても読み込めるようにフォーマットを作成
+       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[yyyy-MM-dd HH:mm:ss][yyyy/MM/dd HH:mm:ss][yyyy-MM-dd HH:mm][yyyy/MM/dd HH:mm]");
+ 
+	   List<Restaurant> restaurantList = new ArrayList<>();
+       Iterable<CSVRecord> csvRecords = csvParser.getRecords();
+
+       for (CSVRecord record : csvRecords) {
+           Restaurant restaurant = new Restaurant();
+           
+           // ⚠️ 新規登録なので ID (カラム1) はセットせず、DBの自動採番に任せる
+           // カラム名（ヘッダー文字列）でデータを取得します
+           restaurant.setName(record.get("店舗名"));
+           restaurant.setImageName(record.get("画像名"));
+           restaurant.setDescription(record.get("説明"));
+           restaurant.setPrice(Integer.parseInt(record.get("料金")));
+           restaurant.setCapacity(Integer.parseInt(record.get("人数")));
+           restaurant.setPostalCode(record.get("郵便番号"));
+           restaurant.setAddress(record.get("住所"));
+           restaurant.setPhoneNumber(record.get("電話番号"));
+
+        // 2. 日時のパース（例 2026-07-25 20:21:02 ）
+           if (!record.get("作成時間").isEmpty()) {
+               LocalDateTime parsed = LocalDateTime.parse(record.get("作成時間"), formatter);
+               restaurant.setCreatedAt(Timestamp.valueOf(parsed));
+           }
+           if (!record.get("更新時間").isEmpty()) {
+               LocalDateTime parsed = LocalDateTime.parse(record.get("更新時間"), formatter);
+               restaurant.setUpdatedAt(Timestamp.valueOf(parsed));
+           }
+           restaurantRepository.save(restaurant); 
+           // ---  紐づく中間テーブル（カテゴリー等）の処理
+           // ※まずは店舗の基本データが登録できることを最優先にします
+        // 3. 定休日（Holiday）の登録処理
+           String holidaysField = record.get("定休日");
+           if (holidaysField != null && !holidaysField.isEmpty()) {
+               // "2 & 3" を ["2", "3"] に分解してループ
+               String[] dayIds = holidaysField.split("\\s*&\\s*");
+               for (String dayIdStr : dayIds) {
+                   Holiday holiday = new Holiday();
+                   holiday.setRestaurant(restaurant); // 保存した店舗を紐づけ
+                   holiday.setDayId(Integer.parseInt(dayIdStr));
+                   holidayRepository.save(holiday); // holidayRepositoryが必要です
+               }
+           }
+
+           // 4. カテゴリー（RestaurantCategory）の登録処理
+           String categoriesField = record.get("カテゴリー");
+           if (categoriesField != null && !categoriesField.isEmpty()) {
+               // "居酒屋 & カフェ" を ["居酒屋", "カフェ"] に分解
+               String[] categoryNames = categoriesField.split("\\s*&\\s*");
+               for (String name : categoryNames) {
+                   // カテゴリー名からデータベースにあるCategoryを取得
+                   Category category = categoryRepository.findByName(name); // メソッドがある前提
+                   if (category != null) {
+                       RestaurantCategory rc = new RestaurantCategory();
+                       rc.setRestaurant(restaurant);
+                       rc.setCategory(category);
+                       restaurantCategoryRepository.save(rc); // 中間テーブルのリポジトリが必要です
+                   }
+               }
+           }
+           
+           restaurantList.add(restaurant);
+       }
+	   return restaurantList;
    }
 }

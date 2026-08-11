@@ -1,6 +1,9 @@
 package com.example.nagoyameshi.service;
 
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -136,4 +139,49 @@ public class UserService {
         User currentUser = userRepository.getReferenceById(userEditForm.getId());
         return !userEditForm.getEmail().equals(currentUser.getEmail());      
     }  
+    
+    public String createCSVStr(List<User> users) {
+ 	   String result = "ID,名前,フリガナ,郵便番号,住所,電話番号,メール,パスワード,権限,アクティブ,年齢,職業,作成時間,更新時間";
+ 	   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+ 	   String content= "";
+ 	   for (User u : users) {
+           String createdAtStr = "";
+           if (u.getCreatedAt() != null) {
+               createdAtStr = u.getCreatedAt().toLocalDateTime().format(formatter);
+           }
+           String updatedAtStr = "";
+           if (u.getUpdatedAt() != null) {
+           	updatedAtStr = u.getUpdatedAt().toLocalDateTime().format(formatter);
+           }
+           content =content+ "\n"+ String.format("%d,%s,%s,%s,%s, %s,%s,%s,%s,%d, %d,%s,%s,%s", 
+               u.getId(), 
+               escapeCsv(u.getName()), 
+               escapeCsv(u.getFurigana()), 
+               escapeCsv(u.getPostalCode()),
+               escapeCsv(u.getAddress()),
+               
+               escapeCsv(u.getPhoneNumber()),
+               escapeCsv(u.getEmail()), 
+               escapeCsv(u.getPassword()), 
+               escapeCsv(u.getRole().getName()), 
+               u.getEnabled() ? 1 : 0, 
+               
+               u.getAge(),
+               escapeCsv(u.getJob().getName()),
+               createdAtStr,
+               updatedAtStr
+           );
+ 	   }
+ 	   result = result + content;
+ 	   return result;
+    }
+    
+    // カンマや改行が含まれる文字列を安全にCSV用にエスケープする補助メソッド
+    private String escapeCsv(String value) {
+        if (value == null) return "";
+        if (value.contains(",") || value.contains("\"") || value.contains("\n") || value.contains("\r")) {
+            return "\"" + value.replace("\"", "\"\"") + "\"";
+        }
+        return value;
+    }
 }

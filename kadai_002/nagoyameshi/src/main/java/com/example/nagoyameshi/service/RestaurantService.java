@@ -199,7 +199,7 @@ public class RestaurantService {
 	           .toList();
 	   return dayIds;
    }
-   
+// -----------------------------CSV関連----------------------------------------------
    public String createCSVStr(List<Restaurant> restaurants) {
 	   String result = "店舗ID,店舗名,画像名,説明,料金,人数,郵便番号,住所,電話番号,定休日,カテゴリー,作成時間,更新時間";
 	   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -223,7 +223,7 @@ public class RestaurantService {
           }
           String updatedAtStr = "";
           if (r.getUpdatedAt() != null) {
-          	updatedAtStr = r.getCreatedAt().toLocalDateTime().format(formatter);
+          	updatedAtStr = r.getUpdatedAt().toLocalDateTime().format(formatter);
           }
           content =content+ "\n"+ String.format("%d,%s,%s,%s,%d,%d,%s,%s,%s,%s,%s,%s,%s", 
               r.getId(), 
@@ -322,4 +322,5 @@ public class RestaurantService {
        }
 	   return restaurantList;
    }
+// -----------------------------CSV関連終わり----------------------------------------------
 }

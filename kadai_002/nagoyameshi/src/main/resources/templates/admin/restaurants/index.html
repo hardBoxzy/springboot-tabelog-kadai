@@ -85,22 +85,26 @@
                                    </tr>                                      
                                </tbody>
                            </table> 
-                           <a th:href="@{/admin/restaurants/download(keyword=${keyword})}" 
-							   class="btn btn-outline-primary">
-							   CSVダウンロード
-							</a>
-
-							<!-- メッセージ表示エリア（コントローラーからの通知用） -->
+                           							<!-- メッセージ表示エリア（コントローラーからの通知用） -->
 							<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
 							<div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 							
-							<!-- インポート用フォーム（enctype="multipart/form-data" が必須です） -->
-							<form th:action="@{/admin/restaurants/import}" method="post" enctype="multipart/form-data" class="mb-3">
-							    <div class="input-group">
-							        <input type="file" name="file" accept=".csv" class="form-control" required>
-							        <button type="submit" class="btn btn-success">CSVインポート</button>
-							    </div>
-							</form>
+							<div class="d-flex gap-2 align-items-center ">
+	                           <a th:href="@{/admin/restaurants/download(keyword=${keyword})}" 
+								   class="btn btn-outline-primary">
+								   CSVダウンロード
+								</a>
+															<!-- インポート用フォーム（enctype="multipart/form-data" が必須です） -->
+								<form th:action="@{/admin/restaurants/import}" method="post" enctype="multipart/form-data" id="importForm" >
+								        <input hidde type="file" name="file" accept=".csv" id="fileInput" style="display: none;" required>
+								        <button type="button" class="btn  btn-outline-primary " onclick="document.getElementById('fileInput').click();">CSVから店舗登録</button>
+								</form>
+                           </div>
+
+
+
+							
+
 							
                             <!-- ページネーション -->
                             <div th:if="${restaurantPage.getTotalPages() > 1}" class="d-flex justify-content-center">
@@ -126,12 +130,20 @@
                    </div>
                </div>              
            </main>
-           
+           </div>
            <!-- フッター -->
            <div th:replace="~{fragment :: footer}"></div>
-       </div>    
+           
        
        <!-- Bootstrap -->
 		<div th:replace="~{fragment :: scripts}"></div>    
+		<script>
+		    // ファイル選択ウィンドウでファイルが選ばれたら、自動的にフォームを送信する
+		    document.getElementById('fileInput').addEventListener('change', function() {
+		        if (this.files.length > 0) {
+		            document.getElementById('importForm').submit();
+		        }
+		    });
+		</script>
    </body>
 </html>

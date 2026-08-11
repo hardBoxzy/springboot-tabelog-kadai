@@ -316,3 +316,10 @@ INSERT IGNORE INTO revenues (id, user_id, amount, merchandise_id, created_at, up
 (67, 1, 300, 1, '2026-08-05', '2026-08-05'),
 (68, 7, 300, 1, '2026-08-07', '2026-08-07'),
 (69, 2, 300, 1, '2026-08-10', '2026-08-10');
+
+
+INSERT IGNORE INTO company_info (id, name, address, representative, estabilished_at,map_src, updated_at) VALUES 
+(1, '株式会社HEZIYIN', '〒150-0043 東京都渋谷区道玄坂2丁目11-1 Gスクエア渋谷道玄坂4FJR山手線「渋谷駅」より徒歩3分',' 代表取締役 何 太郎','2015年3月19日' ,
+'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.7759544892483!2d139.69399665123464!3d35.65789123876098!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188caa0042e8d1%3A0xba130bea826a7aa2!2z44CSMTUwLTAwNDMg5p2x5Lqs6YO95riL6LC35Yy66YGT546E5Z2C77yS5LiB55uu77yR77yR4oiS77yR!5e0!3m2!1sja!2sjp!4v1636872991912!5m2!1sja!2sjp',
+ '2026-08-11 00:00:00');
+

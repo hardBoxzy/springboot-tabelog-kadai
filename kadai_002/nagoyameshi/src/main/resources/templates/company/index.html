@@ -28,6 +28,11 @@
                            
                            <h1 class="mb-4 text-center" th:text="会社概要"></h1>                                                           
                                                                                                    
+                           <div class="d-flex justify-content-end align-items-end mb-3" sec:authorize="hasRole('ROLE_ADMIN')">                    
+                               <div>
+                                   <a th:href="@{/company/edit}">編集</a>                                    
+                               </div>
+                           </div>
                            
                            <div class="mb-4">
                               <img class="w-100" th:src="@{/images/logo2.png}"  alt="SAMURAI Travel">
@@ -44,7 +49,7 @@
                                            </div>
                    
                                            <div class="col">
-                                               <span th:text="株式会社NAGOYAMESHI"></span>
+                                               <span th:text="${companyInfo.getName()}"></span>
                                            </div>
                                        </div>                    
                    						
@@ -54,7 +59,7 @@
                                            </div>
                    
                                            <div class="col">
-                                               <span class="samuraitravel-pre-wrap" >〒150-0043 東京都渋谷区道玄坂2丁目11-1 Gスクエア渋谷道玄坂4FJR山手線「渋谷駅」より徒歩3分</span>
+                                               <span class="samuraitravel-pre-wrap" th:text="${companyInfo.getAddress()}"></span>
                                            </div>
                                        </div>
                    
@@ -64,7 +69,7 @@
                                            </div>
                    
                                            <div class="col">
-                                               <span >代表取締役 田中 太郎</span>
+                                               <span th:text="${companyInfo.getRepresentative()}"></span>
                                            </div>
                                        </div> 
                                        
@@ -74,7 +79,7 @@
                                            </div>
                    
                                            <div class="col">
-                                               <span th:text="2015年3月19日"></span>
+                                               <span th:text="${companyInfo.getEstabilishedAt()}"></span>
                                            </div>
                                       </div>
                                                             
@@ -83,7 +88,7 @@
                            	</div>
                            	 
                             <iframe class="w-100"
-		                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3241.7759544892483!2d139.69399665123464!3d35.65789123876098!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188caa0042e8d1%3A0xba130bea826a7aa2!2z44CSMTUwLTAwNDMg5p2x5Lqs6YO95riL6LC35Yy66YGT546E5Z2C77yS5LiB55uu77yR77yR4oiS77yR!5e0!3m2!1sja!2sjp!4v1636872991912!5m2!1sja!2sjp"
+		                    th:src="${companyInfo.getMapSrc()}"
 		                    style="border:0;" allowfullscreen="" loading="lazy">
 		                	</iframe>         							
                   

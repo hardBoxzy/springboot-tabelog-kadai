@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
+   <head>
+       <div th:replace="~{fragment :: meta}"></div>   
+            
+       <div th:replace="~{fragment :: styles}"></div>
+          
+       <title>店舗詳細</title>   
+   </head>
+   <body>
+       <div class="samuraitravel-wrapper">
+           <!-- ヘッダー -->
+           <div th:replace="~{fragment :: header}"></div>
+           
+           <main>
+               <div class="container pt-4 pb-5 samuraitravel-container">
+                   <div class="row justify-content-center">
+                       <div class="col-xxl-9 col-xl-10 col-lg-11">
+						   
+                           <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                               <ol class="breadcrumb mb-0 d-flex justify-content-between align-items-center w-100">
+								   <div class="d-flex align-items-center">                       
+		                               <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+		                               <li class="breadcrumb-item active" aria-current="page">会社情報</li>
+                                   </div>
+                               </ol>
+                           </nav> 
+                           
+                           <h1 class="mb-4 text-center" th:text="会社概要"></h1>                                                           
+                                                                                                   
+                           
+                           <div class="mb-4">
+                              <img class="w-100" th:src="@{/images/logo2.png}"  alt="SAMURAI Travel">
+                 
+                           </div> 
+                           
+                           <form method="post" th:action="@{/company/update}" th:object="${companyInfoEditForm}" enctype="multipart/form-data">   
+                               <input type="hidden" th:field="*{id}">
+                                                                                        
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="name" class="col-form-label text-md-left fw-bold">会社名</label>
+                                   </div>
+                                   <div class="col-md-8">                                    
+                                       <div th:if="${#fields.hasErrors('name')}" class="text-danger small mb-2" th:errors="*{name}"></div>                                    
+                                       <input type="text" class="form-control" th:field="*{name}" autofocus>
+                                   </div>
+                               </div>
+                                                                                                             
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="address" class="col-form-label text-md-left fw-bold">住所</label>
+                                   </div>
+                                   <div class="col-md-8">
+                                       <div th:if="${#fields.hasErrors('address')}" class="text-danger small mb-2" th:errors="*{address}"></div>
+                                       <input type="text" class="form-control" th:field="*{address}">  
+                                   </div>
+                               </div>
+                                                                                                                       
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="address" class="col-form-label text-md-left fw-bold">代表者</label>
+                                   </div>
+                                   <div class="col-md-8">
+                                       <div th:if="${#fields.hasErrors('representative')}" class="text-danger small mb-2" th:errors="*{representative}"></div>
+                                       <input type="text" class="form-control" th:field="*{representative}">  
+                                   </div>
+                               </div>
+                               
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="estabilishedAt" class="col-form-label text-md-left fw-bold">設立日</label>
+                                   </div>
+                                   <div class="col-md-8">
+                                       <div th:if="${#fields.hasErrors('estabilishedAt')}" class="text-danger small mb-2" th:errors="*{estabilishedAt}"></div>
+                                       <input type="text" class="form-control" th:field="*{estabilishedAt}">  
+                                   </div>
+                               </div>
+                               
+                                <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="mapSrc" class="col-form-label text-md-left fw-bold">GoogleMapソースコード</label>
+                                   </div>
+                                   <div class="col-md-8">
+                                       <div th:if="${#fields.hasErrors('mapSrc')}" class="text-danger small mb-2" th:errors="*{mapSrc}"></div>
+                                       <input type="text" class="form-control" th:field="*{mapSrc}">  
+                                   </div>
+                               </div>
+                               <div class="form-group d-flex justify-content-center my-4">
+                                   <button type="submit" class="btn text-white shadow-sm w-50 samuraitravel-btn">更新</button>
+                               </div>
+                           </form>  
+                           	 
+         							
+                  
+                       </div>
+                   </div>
+               </div>
+           </main>
+        </div>   
+           <!-- フッター -->
+           <div th:replace="~{fragment :: footer}"></div>
+       
+       
+       <div th:replace="~{fragment :: scripts}"></div> 
+       
+  
+               
+ </body>
+</html>

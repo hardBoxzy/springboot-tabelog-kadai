@@ -123,7 +123,14 @@
                                    </div>
                                    <div class="col-md-7">
                                         <div th:if="${#fields.hasErrors('job')}" class="text-danger small mb-2" th:errors="*{job}"></div>
-                                       <input type="text" class="form-control" th:field="*{job}" autocomplete="tel-national" placeholder="1">                                
+<!--                                       <input type="text" class="form-control" th:field="*{job}" autocomplete="tel-national" placeholder="1"> -->
+                                            <select class="form-control form-select" th:field="*{job}">
+											   <div th:each="job : ${jobs}">
+												   <option th:value="${job.id}" th:selected="${jobId == job.id}" th:text="${job.name}">ラーメン</option>
+												   
+											   </div>     
+                                                                                                                                               
+                                           </select>                                
                                    </div>
                                </div>
                                                                                                                        

@@ -1,6 +1,7 @@
 package com.example.nagoyameshi.form;
 
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,13 @@ public class UserEditForm {
     
     @NotBlank(message = "電話番号を入力してください。")
     private String phoneNumber;
+    
+    @NotNull(message = "年齢を入力してください。")
+    @Min(value = 0, message = "1歳以上に設定してください。")
+    private Integer age; 
+    
+    @NotNull(message = "職業を入力してください。")
+    private Integer job;
     
     @NotBlank(message = "メールアドレスを入力してください。")
     private String email;

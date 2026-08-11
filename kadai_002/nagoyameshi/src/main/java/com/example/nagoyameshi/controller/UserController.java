@@ -3,6 +3,7 @@ package com.example.nagoyameshi.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.nagoyameshi.entity.Job;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.UserEditForm;
+import com.example.nagoyameshi.repository.JobRepository;
 import com.example.nagoyameshi.repository.UserRepository;
 import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.StripeService;
@@ -34,13 +37,17 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+	
     private final UserRepository userRepository;    
     private final UserService userService; 
     private final StripeService stripeService;
-    public UserController(UserRepository userRepository, UserService userService, StripeService stripeService) {
+    private final JobRepository jobRepository;
+    public UserController(UserRepository userRepository, UserService userService, StripeService stripeService,
+    		JobRepository jobRepository) {
             this.userRepository = userRepository;     
             this.userService = userService;    
             this.stripeService = stripeService;  
+            this.jobRepository = jobRepository;
     }    
     
     @GetMapping
@@ -77,15 +84,20 @@ public class UserController {
     @GetMapping("/edit")
     public String edit(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {        
         User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());  
-        UserEditForm userEditForm = new UserEditForm(user.getId(), user.getName(), user.getFurigana(), user.getPostalCode(), user.getAddress(), user.getPhoneNumber(), user.getEmail());
-        
+        UserEditForm userEditForm = new UserEditForm(user.getId(), user.getName(), user.getFurigana(),
+        		user.getPostalCode(), user.getAddress(), user.getPhoneNumber(),user.getAge(),
+        		user.getJob().getId(),user.getEmail());
+
+        List<Job> jobs = jobRepository.findAll();
+        model.addAttribute("jobs", jobs);
         model.addAttribute("userEditForm", userEditForm);
         
         return "user/edit";
     } 
     
     @PostMapping("/update")
-    public String update(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,@ModelAttribute @Validated UserEditForm userEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String update(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,@ModelAttribute @Validated UserEditForm userEditForm, BindingResult bindingResult,
+    		RedirectAttributes redirectAttributes, Model model) {
         // メールアドレスが変更されており、かつ登録済みであれば、BindingResultオブジェクトにエラー内容を追加する
         if (userService.isEmailChanged(userEditForm) && userService.isEmailRegistered(userEditForm.getEmail())) {
             FieldError fieldError = new FieldError(bindingResult.getObjectName(), "email", "すでに登録済みのメールアドレスです。");
@@ -93,6 +105,8 @@ public class UserController {
         }
         
         if (bindingResult.hasErrors()) {
+            List<Job> jobs = jobRepository.findAll();
+            model.addAttribute("jobs", jobs);
             return "user/edit";
         }
         

@@ -103,6 +103,44 @@
                                        <input type="text" class="form-control" th:field="*{phoneNumber}" autocomplete="tel-national" placeholder="090-1234-5678">                                
                                    </div>
                                </div>
+                               
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-5">
+                                       <label for="phoneNumber" class="col-form-label text-md-left fw-bold">
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-1">年齢</span>
+                                                <span class="badge bg-danger">必須</span>
+                                            </div>
+                                       </label>
+                                   </div>
+                                   <div class="col-md-7">
+                                        <div th:if="${#fields.hasErrors('age')}" class="text-danger small mb-2" th:errors="*{age}"></div>
+                                       <input type="text" class="form-control" th:field="*{age}" autocomplete="tel-national" placeholder="24">                                
+                                   </div>
+                               </div>
+                               
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-5">
+                                       <label for="phoneNumber" class="col-form-label text-md-left fw-bold">
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-1">職業</span>
+                                                <span class="badge bg-danger">必須</span>
+                                                
+                                            </div>
+                                       </label>
+                                   </div>
+                                   <div class="col-md-7">
+                                        <div th:if="${#fields.hasErrors('job')}" class="text-danger small mb-2" th:errors="*{job}"></div>
+<!--                                       <input type="text" class="form-control" th:field="*{job}" autocomplete="tel-national" placeholder="1"> -->
+                                            <select class="form-control form-select" th:field="*{job}">
+											   <div th:each="job : ${jobs}">
+												   <option th:value="${job.id}" th:selected="${jobId == job.id}" th:text="${job.name}">ラーメン</option>
+												   
+											   </div>     
+                                                                                                                                               
+                                           </select>                                
+                                   </div>
+                               </div>
                                                                                                                        
                                <div class="form-group row mb-3">
                                    <div class="col-md-5">

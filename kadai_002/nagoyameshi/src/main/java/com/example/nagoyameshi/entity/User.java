@@ -63,7 +63,6 @@ public class User {
     @JoinColumn(name = "job_id")
     private Job job;
     
-    
-    
+
     
 }

@@ -59,13 +59,16 @@ public class UserService {
     @Transactional
     public void update(UserEditForm userEditForm) {
         User user = userRepository.getReferenceById(userEditForm.getId());
+        Job job = jobRepository.getReferenceById(userEditForm.getJob());
         
         user.setName(userEditForm.getName());
         user.setFurigana(userEditForm.getFurigana());
         user.setPostalCode(userEditForm.getPostalCode());
         user.setAddress(userEditForm.getAddress());
         user.setPhoneNumber(userEditForm.getPhoneNumber());
-        user.setEmail(userEditForm.getEmail());      
+        user.setEmail(userEditForm.getEmail()); 
+        user.setAge(userEditForm.getAge());
+        user.setJob(job);
         
         userRepository.save(user);
     } 

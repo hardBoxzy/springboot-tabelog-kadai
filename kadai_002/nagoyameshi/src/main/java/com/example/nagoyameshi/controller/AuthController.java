@@ -1,6 +1,8 @@
 package com.example.nagoyameshi.controller;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,11 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.nagoyameshi.entity.Job;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.entity.VerificationToken;
 import com.example.nagoyameshi.event.SignupEventPublisher;
 import com.example.nagoyameshi.form.SignupForm;
 import com.example.nagoyameshi.form.UserPasswordEditForm;
+import com.example.nagoyameshi.repository.JobRepository;
 import com.example.nagoyameshi.service.UserService;
 import com.example.nagoyameshi.service.VerificationTokenService;
 
@@ -27,12 +31,14 @@ public class AuthController {
     private final UserService userService;    
     private final SignupEventPublisher signupEventPublisher;
     private final VerificationTokenService verificationTokenService;
-
+    private final JobRepository jobRepository;
     
-    public AuthController(UserService userService, SignupEventPublisher signupEventPublisher, VerificationTokenService verificationTokenService) {        
+    public AuthController(UserService userService, SignupEventPublisher signupEventPublisher, VerificationTokenService verificationTokenService,
+    		JobRepository jobRepository) {        
         this.userService = userService; 
         this.signupEventPublisher = signupEventPublisher;
         this.verificationTokenService = verificationTokenService;
+        this.jobRepository = jobRepository;
     }    
 	
     @GetMapping("/login")
@@ -41,13 +47,16 @@ public class AuthController {
     }
     
     @GetMapping("/signup")
-    public String signup(Model model) {        
+    public String signup(Model model) { 
+        List<Job> jobs = jobRepository.findAll();
+        model.addAttribute("jobs", jobs);
         model.addAttribute("signupForm", new SignupForm());
         return "auth/signup";
     }  
     
     @PostMapping("/signup")
-    public String signup(@ModelAttribute @Validated SignupForm signupForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {      
+    public String signup(@ModelAttribute @Validated SignupForm signupForm, BindingResult bindingResult,
+    		RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest,Model model) {      
         // メールアドレスが登録済みであれば、BindingResultオブジェクトにエラー内容を追加する
         if (userService.isEmailRegistered(signupForm.getEmail())) {
         	if(userService.isEnabled(signupForm.getEmail())) {
@@ -75,7 +84,8 @@ public class AuthController {
         }        
         
         if (bindingResult.hasErrors()) {
-        	
+            List<Job> jobs = jobRepository.findAll();
+            model.addAttribute("jobs", jobs);
             return "auth/signup";
         }
         

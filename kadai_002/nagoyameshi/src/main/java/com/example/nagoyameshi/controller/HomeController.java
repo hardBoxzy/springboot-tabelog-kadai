@@ -35,7 +35,11 @@ public class HomeController {
     	List<Category> categories = categoryRepository.findAll();
         model.addAttribute("categories", categories);
         List<Restaurant> newRestaurants = restaurantRepository.findTop10ByOrderByCreatedAtDesc();
-        model.addAttribute("newRestaurants", newRestaurants);    
+        model.addAttribute("newRestaurants", newRestaurants);
+        List<Restaurant> highScoreRestaurants = restaurantRepository.findTop5ByOrderByScoreDesc();
+        model.addAttribute("highScoreRestaurants", highScoreRestaurants);
+        List<Restaurant> lowPriceRestaurants = restaurantRepository.findTop6ByOrderByPriceAsc();
+        model.addAttribute("lowPriceRestaurants", lowPriceRestaurants);
         return "index";
     }   
     @GetMapping("/company")

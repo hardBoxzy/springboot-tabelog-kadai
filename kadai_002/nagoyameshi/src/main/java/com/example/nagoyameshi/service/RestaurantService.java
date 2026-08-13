@@ -24,12 +24,14 @@ import com.example.nagoyameshi.entity.Category;
 import com.example.nagoyameshi.entity.Holiday;
 import com.example.nagoyameshi.entity.Restaurant;
 import com.example.nagoyameshi.entity.RestaurantCategory;
+import com.example.nagoyameshi.entity.Review;
 import com.example.nagoyameshi.form.RestaurantEditForm;
 import com.example.nagoyameshi.form.RestaurantRegisterForm;
 import com.example.nagoyameshi.repository.CategoryRepository;
 import com.example.nagoyameshi.repository.HolidayRepository;
 import com.example.nagoyameshi.repository.RestaurantCategoryRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
+import com.example.nagoyameshi.repository.ReviewRepository;
 
 import jakarta.persistence.EntityManager;
 
@@ -42,13 +44,15 @@ public class RestaurantService {
    private final CategoryRepository categoryRepository;
    private final RestaurantCategoryRepository restaurantCategoryRepository;
    private final HolidayRepository holidayRepository;
+   private final ReviewRepository reviewRepository;
    public RestaurantService(RestaurantRepository restaurantRepository, 
 		   CategoryRepository categoryRepository, RestaurantCategoryRepository restaurantCategoryRepository,
-		   HolidayRepository holidayRepository) {
+		   HolidayRepository holidayRepository,ReviewRepository reviewRepository) {
        this.restaurantRepository = restaurantRepository; 
        this.categoryRepository =  categoryRepository;
        this.restaurantCategoryRepository =  restaurantCategoryRepository;
        this.holidayRepository =  holidayRepository;
+       this.reviewRepository =  reviewRepository;
    }    
    
    @Transactional
@@ -323,4 +327,21 @@ public class RestaurantService {
 	   return restaurantList;
    }
 // -----------------------------CSV関連終わり----------------------------------------------
+   @Transactional
+   public void updateScore(Restaurant restaurant) {
+	   List<Review>reviews  = reviewRepository.findAllByRestaurantOrderByCreatedAtDesc(restaurant);
+	   Integer score = 0;
+	   Integer totalScore = 0;
+	   if(reviews != null&& !reviews.isEmpty()) {
+		   for(Review r:reviews) {
+			   totalScore = totalScore + r.getScore();
+		   }
+		   score = totalScore / reviews.size();
+	   }
+	   restaurant.setScore(score);
+	   restaurantRepository.save(restaurant);
+   }
+   
+   
+   
 }

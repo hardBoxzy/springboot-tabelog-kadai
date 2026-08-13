@@ -25,6 +25,7 @@ import com.example.nagoyameshi.form.ReviewRegisterForm;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.repository.ReviewRepository;
 import com.example.nagoyameshi.security.UserDetailsImpl;
+import com.example.nagoyameshi.service.RestaurantService;
 import com.example.nagoyameshi.service.ReviewService;
 
 
@@ -35,10 +36,13 @@ public class ReviewController {
 	private final RestaurantRepository restaurantRepository;  
     private final ReviewRepository reviewRepository;
     private final ReviewService reviewService;
-    public ReviewController( RestaurantRepository restaurantRepository, ReviewRepository reviewRepository, ReviewService reviewService) {
+    private final RestaurantService restaurantService;
+    public ReviewController( RestaurantRepository restaurantRepository, ReviewRepository reviewRepository, 
+    		ReviewService reviewService,RestaurantService restaurantService) {
     	this.reviewRepository = reviewRepository;
         this.restaurantRepository = restaurantRepository;  
         this.reviewService = reviewService;
+        this.restaurantService = restaurantService;
     }  
 	
 	
@@ -101,6 +105,7 @@ public class ReviewController {
     	User user = userDetailsImpl.getUser();
     	Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId); 
     	reviewService.create(reviewRegisterForm,restaurant,user);
+    	restaurantService.updateScore(restaurant);
         redirectAttributes.addFlashAttribute("successMessage", "レビューを投稿しました。");  
         
         return "redirect:/restaurants/" + restaurantId + "/reviews";
@@ -131,9 +136,9 @@ public class ReviewController {
     		@ModelAttribute @Validated ReviewEditForm reviewEditForm,
     		BindingResult bindingResult,                 // バリデーションエラー判定用(form引数のすぐに後ろに定義する必要がある)
     		RedirectAttributes redirectAttributes) {
-    	
+    	Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
     	if (bindingResult.hasErrors()) {
-    		Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId); 
+    		 
     		model.addAttribute("restaurant", restaurant);
     		
     		//なぜかreviewEditFormのIDの値が消えてしまうので、 URLのreviewIdを使って、フォームにIDを確実に再セットする
@@ -143,6 +148,7 @@ public class ReviewController {
     	reviewEditForm.setId(reviewId);
     	
     	reviewService.update(reviewEditForm);
+    	restaurantService.updateScore(restaurant);
         redirectAttributes.addFlashAttribute("successMessage", "レビューを編集しました。");  
         
         return "redirect:/restaurants/" + restaurantId + "/reviews";

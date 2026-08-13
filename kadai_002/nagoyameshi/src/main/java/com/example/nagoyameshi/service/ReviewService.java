@@ -40,7 +40,5 @@ public class ReviewService {
 		 	review.setContent(reviewEditForm.getContent());
 	                   
 		 	reviewRepository.save(review);
-		 	System.out.println(review);
-		 	System.out.println(reviewRepository.getReferenceById(reviewEditForm.getId()));
 	   } 
 }

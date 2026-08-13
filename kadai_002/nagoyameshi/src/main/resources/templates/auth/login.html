@@ -5,7 +5,9 @@
        <div th:replace="~{fragment :: meta}"></div>   
             
        <div th:replace="~{fragment :: styles}"></div> 
-       
+                <!-- slickの読み込み -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
        <title>ログイン</title>       
    </head>
    <body>
@@ -89,14 +91,42 @@
                            </form>
                                                                             
                        </div>
+                       
+					<!-- 全体を囲むクラス名を infinite-slider-container に変更 -->
+					<div class="infinite-slider-container over-back-image mt-5 ">                                       
+					    <!-- 実際に横に動くトラック -->
+					    <div class="carousel-linear">
+					        
+					        <!-- 【1回目】1～7のイラストを出力 -->
+					        <div class="slider-item" th:each="i : ${#numbers.sequence(1, 7)}">
+					            <img th:src="@{|/images/illustration${i}.png|}" alt="イラスト画像">              
+					        </div>                                               
+					        
+					        <!-- 【2回目】ループを繋げるために、全く同じ1～7をもう一度出力（コピー） -->
+					        <div class="slider-item" th:each="i : ${#numbers.sequence(1, 7)}">
+					            <img th:src="@{|/images/illustration${i}.png|}" alt="イラスト画像">              
+					        </div>                                               
+					        <!-- 【3回目】ループを繋げるために、全く同じ1～7をもう一度出力（コピー） -->
+					        <div class="slider-item" th:each="i : ${#numbers.sequence(1, 7)}">
+					            <img th:src="@{|/images/illustration${i}.png|}" alt="イラスト画像">              
+					        </div> 
+					    </div>
+					</div>
+                      
                    </div>
                </div>             
            </main>
-           
+          
            <!-- フッター -->
            <div th:replace="~{fragment :: footer}"></div>
-        </div>   
+        </div>    
        
-       <div th:replace="~{fragment :: scripts}"></div>         
+       <div th:replace="~{fragment :: scripts}"></div>  
+       <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+       		  <!-- slickの読み込み -->
+		  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+		
+		  <script th:src="@{/js/carousel.js}"></script>       
    </body>
 </html>

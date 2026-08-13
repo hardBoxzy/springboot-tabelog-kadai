@@ -5,15 +5,24 @@
         <div th:replace="~{fragment :: meta}"></div>   
              
         <div th:replace="~{fragment :: styles}"></div>
+         <!-- slickの読み込み -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+
        <title>NAGOYAMESHI</title>	
    </head>
    <body>
+	     <img  th:src="@{/images/backImage1.png}" class="back-image"style="top: 60px; left: 0;" alt="backImage1"> 
+	        <img  th:src="@{/images/backImage2.png}" class="back-image"style="bottom: 80px; right: 0;" alt="backImage1">    
         <div class="samuraitravel-wrapper">
+			
             <!-- ヘッダー -->
             <div th:replace="~{fragment :: header}"></div>
             
-            <main>
+            <main >
+<!--				<main class="back-image-relative">-->
                 <div class="container pt-4 pb-5 samuraitravel-container">
+					
                     <div th:if="${param.loggedIn}" class="alert alert-info">
                         ログインしました。
                     </div>  
@@ -26,50 +35,20 @@
                         <span th:text="${successMessage}"></span>
                     </div>
                     
-                      <div class="d-flex justify-content-center">                                            
-                        <form method="get" th:action="@{/restaurants}" class="mb-5 samuraitravel-search-form">
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="店舗名・住所">
-                                <button type="submit" class="btn text-white shadow-sm samuraitravel-btn">検索</button> 
-                            </div>               
-                        </form>                        
-                    </div>                                                                                                  
-                                                     
-                    <h2 class="text-center mb-3">新着</h2>
-                    <div class="row row-cols-lg-5 row-cols-2 g-3 mb-5">                                        
-                        <div class="col" th:each="newRestaurant : ${newRestaurants}">
-                            <a th:href="@{/restaurants/__${newRestaurant.getId()}__}" class="link-dark samuraitravel-card-link">
-                                <div class="card h-100">                                                                        
-                                    <img th:if="${newRestaurant.getImageName()}" th:src="@{/storage/__${newRestaurant.getImageName()}__}" class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">                                     
-                                    <img th:unless="${newRestaurant.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">                                                                                                                        
-                                    <div class="card-body">                                    
-                                        <h3 class="card-title" th:text="${newRestaurant.getName()}"></h3>
-                                        <p class="card-text mb-1">
-                                            <small class="text-muted" th:text="${newRestaurant.getAddress()}"></small>                                            
-                                        </p>
-                                        <p class="card-text">
-                                            <span th:text="${#numbers.formatInteger(newRestaurant.getPrice(), 1, 'COMMA') + '円 / 一人'}"></span>                                            
-                                        </p>                                    
-                                    </div>
-                                </div>    
-                            </a>            
-                        </div>                                               
-                    </div>
+                     <div class="row justify-content-center ">
+                        <div class="col-xl-12 col-lg-8 col-md-10 over-back-image">                    
                     
-                    <div class="row justify-content-center">
-                        <div class="col-xl-9 col-lg-7 col-md-7">                    
-                    
-                            <h2 class="text-center mb-3">カテゴリーから探す</h2>                                        
+<!--                            <h2 class="text-center mb-3">カテゴリーから探す</h2>                                        -->
                              
-                            <table class="table">
-                                <tbody> 
+                            <table class="table  me-5 text-center ">
+                                <tbody > 
 									                                                   
-                                    <tr>
-                                        <th class="me-3 text-nowrap">カテゴリー</th>
+                                    <tr class="col-md-8">
+                                        <th class=" me-5 fs-5 text-nowrap pt-2" >カテゴリー</th>
                                        
-                                        <td>
-                                             <span th:each="category : ${categories}">
-												<a th:href="@{/restaurants(categoryId=${category.id})}" th:text = "${category.name}" class="me-3 text-nowrap">ラーメン</a>	   
+                                        <td  class="row g-0">
+                                             <span th:each="category : ${categories}" class=" col-3 mb-2">
+												<a th:href="@{/restaurants(categoryId=${category.id})}" th:text = "${category.name}" class="me-5 text-nowrap" >ラーメン</a>	   
 											</span>
                                         </td>                                     
                                     </tr>  
@@ -77,15 +56,119 @@
                                 </tbody>
                             </table>  
                         </div>
-                    </div>   
-                       
+                    </div>
+ 
+                                               
+					  
+					                                  
+                    <h2 class="text-center  mt-3 mb-3"><span class="over-back-image">新着</span></h2>
+                    <div class="row row-cols-lg-2 row-cols-1 g-1 mb-2">
+						<div th:each="i : ${#numbers.sequence(1, 2)}"> 
+		                    <div class="carousel-fade over-back-image" th:classappend="'carousel-fade-' + ${i}">
+								<!--★ th:if の条件  i=1 のとき: status.count（1から始まる連番）が奇数の店舗だけ出す
+             					 i=2 のとき: status.count が偶数の店舗だけ出す-->
+								<div class="col " th:each="newRestaurant , status : ${newRestaurants}" th:if="${(status.count % 2) == (i % 2)}">
+		                            <a th:href="@{/restaurants/__${newRestaurant.getId()}__}" class="link-dark samuraitravel-card-link">
+		                                <div class="card h-100">                                                                        
+		                                   <div class="position-relative">                                                                      
+		                                    	<img th:if="${newRestaurant.getImageName()}" th:src="@{/storage/__${newRestaurant.getImageName()}__}" class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">                                     
+		                                   	 	<img th:unless="${newRestaurant.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">                                                                                                                        
+		                                    	<!-- 画像の右下に絶対配置する要素 -->
+										        <div class="position-absolute top-0 end-0 m-2 px-2 py-1 bg-dark bg-opacity-75 rounded-pill text-warning" style="font-size: 1.8rem;">
+										            NEW
+										        </div>
+										    </div>
+								    	<div class="card-body">                                    
+		                                        <h3 class="card-title" th:text="${newRestaurant.getName()}"></h3>
+		                                        <p class="card-text mb-1">
+		                                            <small class="text-muted" th:text="${newRestaurant.getAddress()}"></small>                                            
+		                                        </p>
+		                                        <p class="card-text">
+		                                            <span th:text="${#numbers.formatInteger(newRestaurant.getPrice(), 1, 'COMMA') + '円 / 一人'}"></span>                                            
+		                                        </p>                                    
+		                                    </div>
+		                                </div>    
+		                            </a>            
+		                        </div>
+		                    </div>
+	                    </div>
+                    </div>
+                    
+                    <h2 class="text-center mt-5 mb-3">高評価</h2>
+                    <div class="carousel over-back-image">                                       
+                        <div class="col" th:each="highScoreRestaurant : ${highScoreRestaurants}">
+                            <a th:href="@{/restaurants/__${highScoreRestaurant.getId()}__}" class="link-dark samuraitravel-card-link">
+                                <div class="card h-100">
+									  <div class="position-relative">                                                                      
+                                    	<img th:if="${highScoreRestaurant.getImageName()}" th:src="@{/storage/__${highScoreRestaurant.getImageName()}__}" class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">                                     
+                                   	 	<img th:unless="${highScoreRestaurant.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">                                                                                                                        
+                                    	<!-- 画像の右下に絶対配置する要素 -->
+								        <div class="position-absolute bottom-0 end-0 m-2 px-2 py-1 bg-dark bg-opacity-75 rounded-pill text-warning" style="font-size: 1.3rem;"
+								        th:text="${#strings.repeat('&#9733;', highScoreRestaurant.getScore()) + #strings.repeat('&#9734;', 5 - highScoreRestaurant.getScore())}">
+								            ★★★★☆
+								        </div>
+								    </div>
+                                    <div class="card-body">                                    
+                                        <h3 class="card-title" th:text="${highScoreRestaurant.getName()}"></h3>
+                                        <p class="card-text mb-1">
+                                            <small class="text-muted" th:text="${highScoreRestaurant.getAddress()}"></small>                                            
+                                        </p>
+                                        <p class="card-text">
+                                            <span th:text="${#numbers.formatInteger(highScoreRestaurant.getPrice(), 1, 'COMMA') + '円 / 一人'}"></span>                                            
+                                        </p>                                    
+                                    </div>
+                                </div>    
+                            </a>            
+                        </div>                                               
+                    </div>
+               		
+               		<h2 class="text-center mt-5 mb-3" >料金安い順</h2>
+                    <div class="row row-cols-lg-6 row-cols-3 g-3 mb-5 over-back-image">                                        
+                        <div class="col" th:each="lowPriceRestaurant : ${lowPriceRestaurants}">
+                            <a th:href="@{/restaurants/__${lowPriceRestaurant.getId()}__}" class="link-dark samuraitravel-card-link">
+                                <div class="card h-100 ">
+									  <div class="position-relative">                                                                      
+                                    	<img th:if="${lowPriceRestaurant.getImageName()}" th:src="@{/storage/__${lowPriceRestaurant.getImageName()}__}" class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">                                     
+                                   	 	<img th:unless="${lowPriceRestaurant.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">                                                                                                                        
+                                    	
+								    </div>
+                                    <div class="card-body">                                    
+                                        <h3 class="card-title" th:text="${lowPriceRestaurant.getName()}"></h3>
+                                        <p class="card-text mb-1">
+                                            <small class="text-muted" th:text="${lowPriceRestaurant.getAddress()}"></small>                                            
+                                        </p>
+                                        <p class="card-text">
+                                            <span th:text="${#numbers.formatInteger(lowPriceRestaurant.getPrice(), 1, 'COMMA') + '円 / 一人'}"></span>                                            
+                                        </p>                                    
+                                    </div>
+                                </div>    
+                            </a>            
+                        </div>                                               
+                    </div>
+               		
+               		<div class="d-flex justify-content-center mb-5">                                            
+                        <form method="get" th:action="@{/restaurants}" class="mb-5 samuraitravel-search-form">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="店舗名・住所">
+                                <button type="submit" class="btn text-white shadow-sm samuraitravel-btn">検索</button> 
+                            </div>               
+                        </form>                        
+                    </div>
+                        
                 </div>
             </main>
-         </div>
+        	
             <!-- フッター -->
             <div th:replace="~{fragment :: footer}"></div>
-    
+     </div >
+
         
-        <div th:replace="~{fragment :: scripts}"></div>  
+        <div th:replace="~{fragment :: scripts}"></div> 
+         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+		  <!-- slickの読み込み -->
+		  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+		
+		  <script th:src="@{/js/carousel.js}"></script>
    </body>
 </html>

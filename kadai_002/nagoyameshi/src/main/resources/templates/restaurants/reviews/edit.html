@@ -19,15 +19,15 @@
                            <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                                <ol class="breadcrumb mb-0">
 								   <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li> 
-								   <li class="breadcrumb-item"><a th:href="@{/houses}">民宿一覧</a></li>  
-								   <li class="breadcrumb-item"><a th:href="@{/houses/__${house.getId()}__}">民宿詳細</a></li> 
-								   <li class="breadcrumb-item"><a th:href="@{/houses/__${house.getId()}__/reviews}">レビュー一覧</a></li>                                                             
+								   <li class="breadcrumb-item"><a th:href="@{/restaurants}">民宿一覧</a></li>  
+								   <li class="breadcrumb-item"><a th:href="@{/restaurants/__${restaurant.getId()}__}">民宿詳細</a></li> 
+								   <li class="breadcrumb-item"><a th:href="@{/restaurants/__${restaurant.getId()}__/reviews}">レビュー一覧</a></li>                                                             
                                    <li class="breadcrumb-item active" aria-current="page">レビュー編集</li>
                                </ol>
                            </nav> 
                            
-                           <h1 class="mb-4 text-center" th:text="|${house.name}のレビュー編集|"></h1>
-                           <form method="post" th:action="@{/houses/__${house.getId()}__/reviews/__${reviewEditForm.getId()}__/update}" th:object="${reviewEditForm}" >
+                           <h1 class="mb-4 text-center" th:text="|${restaurant.name}のレビュー編集|"></h1>
+                           <form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/reviews/__${reviewEditForm.getId()}__/update}" th:object="${reviewEditForm}" >
                            
 	                           <div class="form-group row mb-3">
 			   						<div class="col-md-2">

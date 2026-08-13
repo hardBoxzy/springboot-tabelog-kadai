@@ -11,6 +11,6 @@ import com.example.nagoyameshi.entity.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Integer>{
 	public List<Review> findTop6ByRestaurantOrderByCreatedAtDesc(Restaurant restaurant);
-	
+	public List<Review> findAllByRestaurantOrderByCreatedAtDesc(Restaurant restaurant);
 	public Page<Review> findAllByRestaurantOrderByCreatedAtDesc(Restaurant restaurant,Pageable pageable);
 }

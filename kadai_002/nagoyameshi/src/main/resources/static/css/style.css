@@ -27,9 +27,28 @@ a:hover {
    color: #407784;
 }
 
+main {
+	margin-bottom: 40px;
+}
 footer {
  width: 100%;
  background-color: #f2f0eb;
+  position: absolute;
+ bottom: 0; 
+}
+
+.back-image {
+ width: 15%;
+  min-width: 40vh;
+ background-color: #f2f0eb;
+  position: fixed;
+ z-index: -1; 
+}
+
+.over-back-image {
+	background-color: rgb(255, 255, 255) !important;
+	border-radius: 10px;
+	padding: 7px;
 }
 
 .samuraitravel-wrapper {
@@ -129,59 +148,87 @@ footer {
 }
 
 /*会社概要*/
-    #company {
-        margin: 80px auto 80px auto;
-    }
-
-    #company-table {
-        width: 100%;
-    }
-
-    .tableheader {
-        text-align: left;
-        padding: 20px;
-        border-bottom-color: #2710d5;
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-        width: 100px;
-    }
-
-    .tableheader-first {
-        text-align: left;
-        padding: 20px;
-        border-bottom-color: #2710d5;
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-        border-top-color: #2710d5;
-        border-top-width: 1px;
-        border-top-style: solid;
-        width: 100px;
-    }
-
-    .cell {
-        padding: 30px;
-        border-bottom-color: #ececec;
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-    }
-    .cell-first {
-        padding: 30px;
-        border-bottom-color: #ececec;
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-        border-top-color: #ececec;
-        border-top-width: 1px;
-        border-top-style: solid;
-    }
-
     #company > iframe {
         width: 100%;
         height: 368px;
         margin-top: 40px;
     }
 
+
+
 @media screen and (min-width: 1400px) {
  .samuraitravel-container {
    max-width: 1200px;
  }
+ 
+
+}
+
+@media screen and (max-width: 1300px) {
+  .back-image {
+    display: none;
+  }
+}
+
+/* カルーセルの外枠（はみ出たイラストを隠すマスク） */
+.infinite-slider-container {
+  overflow: hidden;
+  width: 100%;
+   -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 10%, /* 左端から10%の位置で完全に表示 */
+    #000 90%, /* 右端から10%（90%の位置）まで完全に表示 */
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+}
+
+/* イラストを横一列に並べる土台 */
+.carousel-linear {
+  display: flex;
+  width: max-content; /* 中身のサイズに合わせて横幅を広げる */
+  /* 25s = 25秒かけて1周（数字を小さくすると早く、大きくすると遅くなります） */
+  animation: scroll-left 20s linear infinite;
+}
+
+/* イラスト1枚あたりの設定（PCでは4分割、スマホでは2分割などの調整が可能です） */
+.carousel-linear .slider-item {
+  width: 160px; /* 例：画面幅に対して4分割（お好みのサイズに調整してください） */
+
+  box-sizing: border-box;
+  padding: 0 10px; /* イラスト同士の横の隙間 */
+}
+
+.carousel-linear .slider-item img {
+  width: 100%;
+  
+  height: auto;
+  display: block;
+}
+
+/* スマホ表示（768px以下）でイラストの大きさを変えたい場合 */
+@media (max-width: 768px) {
+  .carousel-linear .slider-item {
+   width: 160px; /* スマホ画面では2分割（2枚ずつ見える）にする */
+  }
+}
+
+/* ==========================================
+   滑らかに動き続けるアニメーション
+   ========================================== */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* ちょうど半分の位置（1周目が終わった瞬間）にきたら、パッと0%の位置に巻き戻す */
+    transform: translateX(-33.3%);
+  }
 }

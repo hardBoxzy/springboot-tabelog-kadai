@@ -2,8 +2,15 @@ package com.example.nagoyameshi.service;
 
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +26,7 @@ import com.example.nagoyameshi.repository.JobRepository;
 import com.example.nagoyameshi.repository.RoleRepository;
 import com.example.nagoyameshi.repository.TemperaryPasswordRepository;
 import com.example.nagoyameshi.repository.UserRepository;
+import com.example.nagoyameshi.security.UserDetailsImpl;
 
 @Service
 public class UserService {
@@ -186,5 +194,25 @@ public class UserService {
             return "\"" + value.replace("\"", "\"\"") + "\"";
         }
         return value;
+    }
+    
+    // --- ユーザー情報の更新処理の直後に,ログインの状態をすぐに変化させるための関数 ---
+    public void updateLoginInfo(UserDetailsImpl userDetailsImpl) {
+	    // 1. 最新のユーザー情報（更新後のUserエンティティ）を使って、新しいUserDetailsを作成する
+	    // ※教材の仕様に合わせて、新しくUserDetailsImplをnewするか、既存のログイン主体のオブジェクトを書き換えます。
+	       User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
+	       Collection<GrantedAuthority> authorities = new ArrayList<>();         
+	       authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
+	       UserDetailsImpl newUserDetails = new UserDetailsImpl(user, authorities);
+	
+	    // 2. 新しい認証オブジェクト（Authentication）を作成する
+	    Authentication newAuth = new UsernamePasswordAuthenticationToken(
+	        newUserDetails, 
+	        newUserDetails.getPassword(), 
+	        newUserDetails.getAuthorities()
+	    );
+	
+	    // 3. Spring Securityのコンテキストに新しい認証情報をセットして、セッションを上書きする
+	    SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 }

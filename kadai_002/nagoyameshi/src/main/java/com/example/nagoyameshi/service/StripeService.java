@@ -61,8 +61,8 @@ public class StripeService {
                         .setQuantity(1L)
                         .build())
                 .setMode(SessionCreateParams.Mode.SUBSCRIPTION) // ★サブスクリプションモードに変更
-                .setSuccessUrl(requestUrl.replaceAll("/subscription", "") + "?subscribed") // 成功時のリダイレクト先（例: マイページ）
-                .setCancelUrl(requestUrl.replaceAll("/subscription", "") + "?canceled")             // キャンセル時のリダイレクト先
+                .setSuccessUrl(requestUrl.replaceAll("/subscription", "") + "?subscribed=true") // 成功時のリダイレクト先（例: マイページ）
+                .setCancelUrl(requestUrl.replaceAll("/subscription", "") + "?canceled=true")             // キャンセル時のリダイレクト先
                 .setSubscriptionData(
                     SessionCreateParams.SubscriptionData.builder()
                         .putMetadata("userId", userId.toString()) // ★Webhookで誰の決済か判別するためにIDを格納

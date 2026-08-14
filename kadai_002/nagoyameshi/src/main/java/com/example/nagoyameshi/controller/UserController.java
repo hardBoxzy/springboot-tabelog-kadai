@@ -1,16 +1,9 @@
 package com.example.nagoyameshi.controller;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -57,25 +50,9 @@ public class UserController {
         User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());  
         
         model.addAttribute("user", user);
-        
-        if (isSubscribed) {
-        	// --- ユーザー情報の更新処理の直後に追加します ---
-
-            // 1. 最新のユーザー情報（更新後のUserエンティティ）を使って、新しいUserDetailsを作成する
-            // ※教材の仕様に合わせて、新しくUserDetailsImplをnewするか、既存のログイン主体のオブジェクトを書き換えます。
-               Collection<GrantedAuthority> authorities = new ArrayList<>();         
-               authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
-               UserDetailsImpl newUserDetails = new UserDetailsImpl(user, authorities);
-
-            // 2. 新しい認証オブジェクト（Authentication）を作成する
-            Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                newUserDetails, 
-                newUserDetails.getPassword(), 
-                newUserDetails.getAuthorities()
-            );
-
-            // 3. Spring Securityのコンテキストに新しい認証情報をセットして、セッションを上書きする
-            SecurityContextHolder.getContext().setAuthentication(newAuth);
+        System.out.println("isSubscribed の値は: " + isSubscribed);
+        if (isSubscribed || isCanceled) {
+        	userService.updateLoginInfo(userDetailsImpl);
         }
         
         return "user/index";
@@ -113,25 +90,8 @@ public class UserController {
         userService.update(userEditForm);
         redirectAttributes.addFlashAttribute("successMessage", "会員情報を編集しました。");
         
-     // --- ユーザー情報の更新処理の直後に追加します ---
-
-     // 1. 最新のユーザー情報（更新後のUserエンティティ）を使って、新しいUserDetailsを作成する
-     // ※教材の仕様に合わせて、新しくUserDetailsImplをnewするか、既存のログイン主体のオブジェクトを書き換えます。
-        User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
-        Collection<GrantedAuthority> authorities = new ArrayList<>();         
-        authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
-        UserDetailsImpl newUserDetails = new UserDetailsImpl(user, authorities);
-
-     // 2. 新しい認証オブジェクト（Authentication）を作成する
-     Authentication newAuth = new UsernamePasswordAuthenticationToken(
-         newUserDetails, 
-         newUserDetails.getPassword(), 
-         newUserDetails.getAuthorities()
-     );
-
-     // 3. Spring Securityのコンテキストに新しい認証情報をセットして、セッションを上書きする
-     SecurityContextHolder.getContext().setAuthentication(newAuth);
-     
+        userService.updateLoginInfo(userDetailsImpl);
+        
         return "redirect:/user";
     } 
     

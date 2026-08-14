@@ -58,7 +58,7 @@ public class ReviewController {
     	 model.addAttribute("reviewPage", reviewPage);
                  
     	
-        return "/restaurants/reviews/index";
+        return "restaurants/reviews/index";
     }
     
     @PostMapping("/{id}/reviews/{reviewId}/delete")

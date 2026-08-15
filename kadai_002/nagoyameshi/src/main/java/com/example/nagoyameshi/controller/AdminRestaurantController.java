@@ -116,7 +116,7 @@ public class AdminRestaurantController {
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable(name = "id") Integer id, Model model) {
     	Restaurant restaurant = restaurantRepository.getReferenceById(id);
-    	String imageName = restaurant.getImageName() ;
+    	String imageName = restaurant.getImagePath() ;
         List<Integer> categoryIds = restaurantService.getCategoryIds(restaurant);
         List<Integer> dayIds = restaurantService.getCategoryIds(restaurant);
         
@@ -154,7 +154,7 @@ public class AdminRestaurantController {
     public String delete(@PathVariable(name = "id") Integer id,@RequestParam(name = "page", required = false) Integer page, RedirectAttributes redirectAttributes) {        
         restaurantRepository.deleteById(id);
                 
-        redirectAttributes.addFlashAttribute("successMessage", "民宿を削除しました。");
+        redirectAttributes.addFlashAttribute("successMessage", "店舗を削除しました。");
         
         return "redirect:/admin/restaurants?page="+ String.valueOf(page);
     }

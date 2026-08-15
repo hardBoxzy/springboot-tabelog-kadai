@@ -12,12 +12,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "restaurants")
 @Data
+@NoArgsConstructor
+@jakarta.persistence.EntityListeners(com.example.nagoyameshi.config.S3UrlInterceptor.class)
 public class Restaurant {
+    
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -74,5 +80,20 @@ public class Restaurant {
     // ゲッターを追加
     public List<Holiday> getHolidays() {
         return this.holidays;
+    }
+    
+    @Transient
+    private String s3UrlBase;
+
+    // 💡 ゲッターでこれらを結合して返却する
+    public String getImagePath() {
+        if (this.imageName == null || this.imageName.isEmpty()) {
+            return null;
+        }
+        // もし画像名がすでにフルURL（過去のデータなど）ならそのまま返す安全策
+        if (this.imageName.startsWith("http")) {
+            return this.imageName;
+        }
+        return this.s3UrlBase + "/" + this.imageName;
     }
 }

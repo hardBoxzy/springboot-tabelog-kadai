@@ -58,7 +58,7 @@
                         </div>
                     </div>
  
-                                               
+                                       	 	                         
 					  
 					                                  
                     <h2 class="text-center  mt-3 mb-3"><span class="over-back-image">新着</span></h2>
@@ -71,7 +71,7 @@
 		                            <a th:href="@{/restaurants/__${newRestaurant.getId()}__}" class="link-dark samuraitravel-card-link">
 		                                <div class="card h-100">                                                                        
 		                                   <div class="position-relative">                                                                      
-		                                    	<img th:if="${newRestaurant.getImageName()}" th:src="@{/storage/__${newRestaurant.getImageName()}__}" class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">                                     
+		                                    	<img th:if="${newRestaurant.getImageName()}" th:src="${newRestaurant.getImagePath()}" class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">                                     
 		                                   	 	<img th:unless="${newRestaurant.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">                                                                                                                        
 		                                    	<!-- 画像の右下に絶対配置する要素 -->
 										        <div class="position-absolute top-0 end-0 m-2 px-2 py-1 bg-dark bg-opacity-75 rounded-pill text-warning" style="font-size: 1.8rem;">
@@ -93,15 +93,15 @@
 		                    </div>
 	                    </div>
                     </div>
-                    
+                      
                     <h2 class="text-center mt-5 mb-3">高評価</h2>
                     <div class="carousel over-back-image">                                       
                         <div class="col" th:each="highScoreRestaurant : ${highScoreRestaurants}">
                             <a th:href="@{/restaurants/__${highScoreRestaurant.getId()}__}" class="link-dark samuraitravel-card-link">
                                 <div class="card h-100">
 									  <div class="position-relative">                                                                      
-                                    	<img th:if="${highScoreRestaurant.getImageName()}" th:src="@{/storage/__${highScoreRestaurant.getImageName()}__}" class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">                                     
-                                   	 	<img th:unless="${highScoreRestaurant.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">                                                                                                                        
+                                    	<img th:if="${highScoreRestaurant.getImagePath()}" th:src="${highScoreRestaurant.getImagePath()}" class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">                                     
+                                   	 	<img th:unless="${highScoreRestaurant.getImagePath()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">                                                                                                                        
                                     	<!-- 画像の右下に絶対配置する要素 -->
 								        <div class="position-absolute bottom-0 end-0 m-2 px-2 py-1 bg-dark bg-opacity-75 rounded-pill text-warning" style="font-size: 1.3rem;"
 								        th:text="${#strings.repeat('&#9733;', highScoreRestaurant.getScore()) + #strings.repeat('&#9734;', 5 - highScoreRestaurant.getScore())}">
@@ -123,13 +123,14 @@
                     </div>
                		
                		<h2 class="text-center mt-5 mb-3" >料金安い順</h2>
+               		
                     <div class="row row-cols-lg-6 row-cols-3 g-3 mb-5 over-back-image">                                        
                         <div class="col" th:each="lowPriceRestaurant : ${lowPriceRestaurants}">
                             <a th:href="@{/restaurants/__${lowPriceRestaurant.getId()}__}" class="link-dark samuraitravel-card-link">
                                 <div class="card h-100 ">
 									  <div class="position-relative">                                                                      
-                                    	<img th:if="${lowPriceRestaurant.getImageName()}" th:src="@{/storage/__${lowPriceRestaurant.getImageName()}__}" class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">                                     
-                                   	 	<img th:unless="${lowPriceRestaurant.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">                                                                                                                        
+                                    	<img th:if="${lowPriceRestaurant.getImagePath()}" th:src="${lowPriceRestaurant.getImagePath()}" class="card-img-top samuraitravel-vertical-card-image" alt="店舗画像">                                     
+                                   	 	<img th:unless="${lowPriceRestaurant.getImagePath()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-vertical-card-image" alt="NO IMAGE">                                                                                                                        
                                     	
 								    </div>
                                     <div class="card-body">                                    

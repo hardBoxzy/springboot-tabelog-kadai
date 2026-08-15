@@ -43,7 +43,7 @@
                                    </div>                                    
                                    <div class="col-md-8">
                                        <div th:if="${#fields.hasErrors('imageFile')}" class="text-danger small mb-2" th:errors="*{imageFile}"></div>  
-                                       <input type="file" class="form-control" th:field="*{imageFile}">
+                                       <input type="file" class="form-control" id="imageFile" name="imageFile">
                                    </div>
                                </div>   
                                

@@ -110,6 +110,12 @@
 			    <artifactId>commons-csv</artifactId>
 			    <version>1.10.0</version>
 			</dependency>
+			<!-- AWS SDK v2 S3 -->
+		<dependency>
+		    <groupId>software.amazon.awssdk</groupId>
+		    <artifactId>s3</artifactId>
+		    <version>2.25.0</version> <!-- 2.x系の安定したバージョン -->
+		</dependency>
 		
 	</dependencies>
 

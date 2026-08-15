@@ -4,7 +4,6 @@ package com.example.nagoyameshi.service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,14 +44,16 @@ public class RestaurantService {
    private final RestaurantCategoryRepository restaurantCategoryRepository;
    private final HolidayRepository holidayRepository;
    private final ReviewRepository reviewRepository;
+   private final S3Service s3Service;
    public RestaurantService(RestaurantRepository restaurantRepository, 
 		   CategoryRepository categoryRepository, RestaurantCategoryRepository restaurantCategoryRepository,
-		   HolidayRepository holidayRepository,ReviewRepository reviewRepository) {
+		   HolidayRepository holidayRepository,ReviewRepository reviewRepository,S3Service s3Service) {
        this.restaurantRepository = restaurantRepository; 
        this.categoryRepository =  categoryRepository;
        this.restaurantCategoryRepository =  restaurantCategoryRepository;
        this.holidayRepository =  holidayRepository;
        this.reviewRepository =  reviewRepository;
+       this.s3Service = s3Service;
    }    
    
    @Transactional
@@ -60,12 +61,22 @@ public class RestaurantService {
 	   Restaurant restaurant = new Restaurant();        
        MultipartFile imageFile = restaurantRegisterForm.getImageFile();
        
-       if (!imageFile.isEmpty()) {
-           String imageName = imageFile.getOriginalFilename(); 
-           String hashedImageName = generateNewFileName(imageName);
-           Path filePath = Paths.get("src/main/resources/static/storage/" + hashedImageName);
-           copyImageFile(imageFile, filePath);
-           restaurant.setImageName(hashedImageName);
+       if (imageFile != null &&  !imageFile.isEmpty()) {
+    	   String imageName;
+			try {
+				imageName = s3Service.uploadFile(imageFile);
+				restaurant.setImageName(imageName);
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
+    	   
+//           String imageName = imageFile.getOriginalFilename(); 
+//           String hashedImageName = generateNewFileName(imageName);
+//           Path filePath = Paths.get("src/main/resources/static/storage/" + hashedImageName);
+//           copyImageFile(imageFile, filePath);
+////           restaurant.setImageName(hashedImageName);
+           
        }
        
        
@@ -100,12 +111,15 @@ public class RestaurantService {
       Restaurant restaurant = restaurantRepository.getReferenceById(restaurantEditForm.getId());
        MultipartFile imageFile = restaurantEditForm.getImageFile();
        
-       if (!imageFile.isEmpty()) {
-           String imageName = imageFile.getOriginalFilename(); 
-           String hashedImageName = generateNewFileName(imageName);
-           Path filePath = Paths.get("src/main/resources/static/storage/" + hashedImageName);
-           copyImageFile(imageFile, filePath);
-           restaurant.setImageName(hashedImageName);
+       if (imageFile != null &&  !imageFile.isEmpty()) {
+    	   String imageName;
+			try {
+				imageName = s3Service.uploadFile(imageFile);
+				restaurant.setImageName(imageName);
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			}
        }
        
        restaurant.setName(restaurantEditForm.getName());                

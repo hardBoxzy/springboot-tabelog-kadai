@@ -33,7 +33,7 @@
                            </div>                                                 
                            
                            <div class="mb-3">
-                               <img th:if="${restaurant.getImageName()}" th:src="@{/storage/__${restaurant.getImageName()}__}" class="w-100" alt="民宿画像">
+                               <img th:if="${restaurant.getImageName()}" th:src="${restaurant.getImagePath()}" class="w-100" alt="民宿画像">
                                <img th:unless="${restaurant.getImageName()}" th:src="@{/images/noImage.png}" class="w-100" alt="NO IMAGE">
                            </div>   
                            

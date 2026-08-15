@@ -49,7 +49,7 @@ public class Restaurant {
     private String phoneNumber;
     
     @Column(name = "score")
-    private Integer score;
+    private Integer score= 0;
     
     @Column(name = "created_at", insertable = false, updatable = false)
     private Timestamp createdAt;

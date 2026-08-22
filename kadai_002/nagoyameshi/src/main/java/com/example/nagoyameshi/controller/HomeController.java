@@ -80,5 +80,10 @@ public class HomeController {
         redirectAttributes.addFlashAttribute("successMessage", "店舗情報を編集しました。");
         
         return "redirect:/company";
-    }   
+    }  
+    
+    
+    /**
+     * これはHomeのコントローラーです。
+     */
 }

@@ -35,7 +35,8 @@
 		                               <a th:href="@{/restaurants/__${favorite.getRestaurant.getId()}__}" class="link-dark samuraitravel-card-link">
 		                                   <div class="card h-100">   
 		                                       <div class="row g-0">
-		                                           <div class="col-md-4">                                                                           
+		                                           <div class="col-md-4">  
+													                                                                            
 		                                               <img th:if="${favorite.getRestaurant.getImagePath()}" th:src="${favorite.getRestaurant.getImagePath()}" class="card-img-top samuraitravel-horizontal-card-image" alt="店舗画像">                                                     
 		                                               <img th:unless="${favorite.getRestaurant.getImagePath()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-horizontal-card-image" alt="NO IMAGE">                                                    
 		                                           </div> 
